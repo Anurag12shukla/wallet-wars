@@ -63,7 +63,7 @@ export default function ArenaPage() {
   };
 
   const handleStartBattle = async () => {
-    const p1 = isDemo ? demoP1.wallet : (myWarrior?.walletAddress || publicKey?.toString());
+    const p1 = isDemo ? demoP1.wallet : (myWarrior?.walletAddress || account || '');
     const p2 = isDemo ? demoP2.wallet : opponentWarrior?.walletAddress;
 
     if (!p1 || !p2) return;
@@ -109,7 +109,7 @@ export default function ArenaPage() {
         isDemo={isDemo}
         onRematch={handleRematch}
         onNewChallenge={handleNewChallenge}
-        playerOneWallet={isDemo ? demoP1.wallet : publicKey?.toString() || ''}
+        playerOneWallet={isDemo ? demoP1.wallet : account || ''}
         playerTwoWallet={isDemo ? demoP2.wallet : opponentWarrior?.walletAddress || ''}
       />
     );

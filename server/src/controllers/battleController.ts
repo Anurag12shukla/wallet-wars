@@ -4,9 +4,8 @@ import { Battle } from '../models/Battle';
 import { Warrior } from '../models/Warrior';
 import { runBattleEngine, generateBattleSeed, calculateXpReward, calculateLevel } from '../services/battleEngine';
 import { checkAndUnlockAchievements } from '../services/achievementService';
-import { analyzeWallet } from '../services/walletAnalysis';
-import { generateWarriorFromAnalysis } from '../services/warriorGenerator';
-import { isValidSolanaAddress, formatSuccess, formatError } from '../utils/helpers';
+import { isValidRobinhoodOrWalletAddress, formatSuccess, formatError } from '../utils/helpers';
+import { findOrCreateWarrior } from '../utils/demoWarriors';
 
 export const createBattleController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -19,10 +18,8 @@ export const createBattleController = async (req: Request, res: Response, next: 
     // Handle demo battles
     const isDemo = playerOneWallet.startsWith('demo_') || playerTwoWallet.startsWith('demo_');
 
-    if (!isDemo) {
-      if (!isValidSolanaAddress(playerOneWallet) || !isValidSolanaAddress(playerTwoWallet)) {
-        return res.status(400).json(formatError('INVALID_WALLET', 'One or both wallet addresses are invalid.'));
-      }
+    if (!isValidRobinhoodOrWalletAddress(playerOneWallet) || !isValidRobinhoodOrWalletAddress(playerTwoWallet)) {
+      return res.status(400).json(formatError('INVALID_WALLET', 'One or both wallet addresses are invalid.'));
     }
 
     const p1Normalized = playerOneWallet.toLowerCase();
@@ -33,20 +30,10 @@ export const createBattleController = async (req: Request, res: Response, next: 
     }
 
     // Load or generate warriors
-    let p1Warrior = await Warrior.findOne({ walletAddress: p1Normalized });
-    let p2Warrior = await Warrior.findOne({ walletAddress: p2Normalized });
-
-    if (!p1Warrior && !isDemo) {
-      const analysis = await analyzeWallet(playerOneWallet);
-      const data = generateWarriorFromAnalysis(analysis);
-      p1Warrior = await Warrior.create(data);
-    }
-
-    if (!p2Warrior && !isDemo) {
-      const analysis = await analyzeWallet(playerTwoWallet);
-      const data = generateWarriorFromAnalysis(analysis);
-      p2Warrior = await Warrior.create(data);
-    }
+    const [p1Warrior, p2Warrior] = await Promise.all([
+      findOrCreateWarrior(playerOneWallet),
+      findOrCreateWarrior(playerTwoWallet),
+    ]);
 
     if (!p1Warrior || !p2Warrior) {
       return res.status(404).json(formatError('WARRIOR_NOT_FOUND', 'Could not find or create warriors for the given wallets.'));
@@ -123,39 +110,36 @@ export const createBattleController = async (req: Request, res: Response, next: 
     const p1NewXp = p1Warrior.xp + p1Xp;
     const p2NewXp = p2Warrior.xp + p2Xp;
 
-    await Warrior.updateOne(
-      { walletAddress: p1Normalized },
-      {
-        $inc: {
-          wins: p1Won ? 1 : 0,
-          losses: p1Won ? 0 : 1,
-          xp: p1Xp,
-          winStreak: p1Won ? 1 : 0,
-        },
-        $set: {
-          level: calculateLevel(p1NewXp),
-          ...(p1Won ? {} : { winStreak: 0 }),
-        },
-        $max: { bestWinStreak: p1Won ? p1Warrior.winStreak + 1 : p1Warrior.bestWinStreak },
-      }
-    );
+    const p1UpdateDoc: Record<string, any> = {
+      $inc: {
+        wins: p1Won ? 1 : 0,
+        losses: p1Won ? 0 : 1,
+        xp: p1Xp,
+        ...(p1Won ? { winStreak: 1 } : {}),
+      },
+      $set: {
+        level: calculateLevel(p1NewXp),
+        ...(!p1Won ? { winStreak: 0 } : {}),
+      },
+      $max: { bestWinStreak: p1Won ? p1Warrior.winStreak + 1 : p1Warrior.bestWinStreak },
+    };
 
-    await Warrior.updateOne(
-      { walletAddress: p2Normalized },
-      {
-        $inc: {
-          wins: p2Won ? 1 : 0,
-          losses: p2Won ? 0 : 1,
-          xp: p2Xp,
-          winStreak: p2Won ? 1 : 0,
-        },
-        $set: {
-          level: calculateLevel(p2NewXp),
-          ...(p2Won ? {} : { winStreak: 0 }),
-        },
-        $max: { bestWinStreak: p2Won ? p2Warrior.winStreak + 1 : p2Warrior.bestWinStreak },
-      }
-    );
+    const p2UpdateDoc: Record<string, any> = {
+      $inc: {
+        wins: p2Won ? 1 : 0,
+        losses: p2Won ? 0 : 1,
+        xp: p2Xp,
+        ...(p2Won ? { winStreak: 1 } : {}),
+      },
+      $set: {
+        level: calculateLevel(p2NewXp),
+        ...(!p2Won ? { winStreak: 0 } : {}),
+      },
+      $max: { bestWinStreak: p2Won ? p2Warrior.winStreak + 1 : p2Warrior.bestWinStreak },
+    };
+
+    await Warrior.updateOne({ walletAddress: p1Normalized }, p1UpdateDoc);
+    await Warrior.updateOne({ walletAddress: p2Normalized }, p2UpdateDoc);
 
     // Fetch updated warriors for achievement check
     const p1Updated = await Warrior.findOne({ walletAddress: p1Normalized });

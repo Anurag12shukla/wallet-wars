@@ -62,6 +62,10 @@ export default function HomePage() {
     navigate('/arena');
   };
 
+  const handleEnterArena = () => {
+    navigate('/arena');
+  };
+
   const showcase = ARCHETYPE_SHOWCASE[currentShowcase];
   const showcaseMeta = getArchetypeMeta(showcase.archetype);
 

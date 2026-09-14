@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { DailyChallenge, ChallengeProgress } from '../models/DailyChallenge';
 import { Achievement, UserAchievement } from '../models/Achievement';
 import { Warrior } from '../models/Warrior';
+import { Battle } from '../models/Battle';
 import { ACHIEVEMENTS_DATA } from '../utils/achievementsData';
 import { formatSuccess, formatError } from '../utils/helpers';
 
@@ -122,7 +123,7 @@ export const getStatsController = async (req: Request, res: Response, next: Next
   try {
     const [totalWarriors, totalBattles] = await Promise.all([
       Warrior.countDocuments(),
-      (await import('../models/Battle.js')).Battle.countDocuments(),
+      Battle.countDocuments(),
     ]);
 
     const topWarrior = await Warrior.findOne().sort({ wins: -1 }).select('name archetype wins walletAddress');
