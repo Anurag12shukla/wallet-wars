@@ -15,10 +15,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: [
-      '@solana/wallet-adapter-base',
-      '@solana/wallet-adapter-react',
-      '@solana/wallet-adapter-react-ui',
-      '@solana/web3.js',
+      'ethers',
     ],
   },
   server: {

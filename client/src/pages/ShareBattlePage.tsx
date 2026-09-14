@@ -67,7 +67,7 @@ export default function ShareBattlePage() {
             </div>
 
             <p className="text-gray-400 text-sm mb-6">
-              Your Solana wallet is your warrior. Join the arena.
+              Your Robinhood wallet & portfolio is your warrior. Join the arena.
             </p>
 
             <div className="flex flex-col gap-3">
@@ -81,7 +81,7 @@ export default function ShareBattlePage() {
           </div>
 
           <div className="text-center text-gray-600 text-xs font-mono">
-            Built on Solana · wallet-wars.io
+            Built on Robinhood Network (Chain ID 46630) · wallet-wars.io
           </div>
         </motion.div>
       </div>

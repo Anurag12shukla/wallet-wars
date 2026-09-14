@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useEVMWallet } from '../context/EVMWalletContext';
+import RobinhoodWalletButton from '../components/layout/RobinhoodWalletButton';
 import { useGame } from '../context/GameContext';
 import { useWarrior } from '../hooks/useWarrior';
 import { useBattle } from '../hooks/useBattle';
 import WarriorCard from '../components/warrior/WarriorCard';
 import WarriorReveal from '../components/warrior/WarriorReveal';
 import BattleScreen from '../components/battle/BattleScreen';
-import { isValidSolanaAddress, DEMO_WARRIORS, getArchetypeMeta } from '../utils';
+import { isValidRobinhoodOrWalletAddress, DEMO_WARRIORS, getArchetypeMeta } from '../utils';
 import type { Warrior, BattleResult } from '../types';
 
 type ArenaPhase = 'hub' | 'revealing' | 'opponent-select' | 'fighting' | 'result';
@@ -17,7 +17,7 @@ type ArenaPhase = 'hub' | 'revealing' | 'opponent-select' | 'fighting' | 'result
 export default function ArenaPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { publicKey } = useWallet();
+  const { account } = useEVMWallet();
   const { warrior: myWarrior, isGenerating } = useGame();
   const [phase, setPhase] = useState<ArenaPhase>('hub');
   const [opponentWallet, setOpponentWallet] = useState('');
@@ -40,19 +40,19 @@ export default function ArenaPage() {
 
   // When wallet connects, show reveal if no warrior yet
   useEffect(() => {
-    if (publicKey && !myWarrior && !isGenerating) {
+    if (account && !myWarrior && !isGenerating) {
       setPhase('revealing');
-    } else if (publicKey && myWarrior && phase === 'hub') {
+    } else if (account && myWarrior && phase === 'hub') {
       // do nothing, let user choose opponent
     }
-  }, [publicKey, myWarrior, isGenerating]);
+  }, [account, myWarrior, isGenerating]);
 
   const handleOpponentSearch = async () => {
     if (!opponentWallet) return;
     setWalletError('');
 
-    if (!isValidSolanaAddress(opponentWallet) && !opponentWallet.startsWith('demo_')) {
-      setWalletError('INVALID WALLET ADDRESS.');
+    if (!isValidRobinhoodOrWalletAddress(opponentWallet) && !opponentWallet.startsWith('demo_')) {
+      setWalletError('INVALID ROBINHOOD WALLET OR HANDLE.');
       return;
     }
 
@@ -253,15 +253,15 @@ export default function ArenaPage() {
             {/* Left: My Warrior */}
             <div>
               <h2 className="font-display text-sm text-gray-400 tracking-widest mb-4">YOUR GLADIATOR</h2>
-              {!myWarrior && !publicKey ? (
+              {!myWarrior && !account ? (
                 <div className="bg-robinhood-card border border-robinhood-border rounded-2xl p-8 text-center shadow-lg">
                   <p className="text-4xl mb-4">🏹</p>
                   <p className="text-white font-display text-lg mb-2">LINK YOUR ROBINHOOD PROFILE</p>
                   <p className="text-gray-400 text-sm mb-6 max-w-sm mx-auto">
-                    Connect your Web3 wallet or link your Robinhood trading handle to generate your combat gladiator.
+                    Connect your EVM wallet or link your Robinhood trading handle to generate your combat gladiator on Robinhood Testnet.
                   </p>
                   <div className="flex justify-center">
-                    <WalletMultiButton />
+                    <RobinhoodWalletButton />
                   </div>
                 </div>
               ) : isGenerating ? (

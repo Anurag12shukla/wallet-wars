@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Keypair } from '@solana/web3.js';
-import bs58 from 'bs58';
+import { ethers } from 'ethers';
 
 const API_URL = 'http://localhost:5001/api';
 
@@ -10,14 +9,12 @@ async function runTest() {
     const health = await axios.get(`${API_URL}/health`);
     console.log('Health:', health.data.success);
 
-    // Generate a random wallet
-    const keypair1 = Keypair.generate();
-    const wallet1 = keypair1.publicKey.toString();
-    console.log(`\nWallet 1: ${wallet1}`);
+    // Generate random Robinhood testnet EVM wallets
+    const wallet1 = ethers.Wallet.createRandom().address;
+    console.log(`\nRobinhood EVM Wallet 1: ${wallet1}`);
 
-    const keypair2 = Keypair.generate();
-    const wallet2 = keypair2.publicKey.toString();
-    console.log(`Wallet 2: ${wallet2}`);
+    const wallet2 = ethers.Wallet.createRandom().address;
+    console.log(`Robinhood EVM Wallet 2: ${wallet2}`);
 
     console.log('\n2. Scanning Wallet 1 (Generating Warrior)...');
     const scan1 = await axios.post(`${API_URL}/wallet/scan`, { walletAddress: wallet1 });

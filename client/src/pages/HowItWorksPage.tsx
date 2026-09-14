@@ -6,35 +6,35 @@ const STEPS = [
   {
     n: '01',
     title: 'CONNECT YOUR WALLET',
-    desc: 'Connect your Solana wallet using Phantom, Solflare, or Backpack. We never ask for your private key or seed phrase.',
+    desc: 'Connect your EVM Web3 wallet (MetaMask, Robinhood Wallet, Rainbow, Rabby) to the Robinhood Testnet (Chain ID 46630). We never ask for your private key.',
     icon: '🔗',
-    detail: 'Your wallet connection is handled entirely by the official Solana Wallet Adapter. We only read your public address.',
+    detail: 'Your wallet connection is handled directly via standard EIP-1193 EVM providers. One-click network switching to Robinhood Testnet is included.',
   },
   {
     n: '02',
-    title: 'WALLET ANALYSIS',
-    desc: 'We scan publicly available Solana blockchain data to understand your wallet\'s history and behavior.',
+    title: 'PORTFOLIO & ON-CHAIN ANALYSIS',
+    desc: 'We scan public Robinhood Testnet blockchain data, balances, and trading history to understand your gladiator\'s combat style.',
     icon: '🔍',
-    detail: 'We analyze: wallet age, transaction count, frequency, token holdings, NFT activity, DeFi interactions, trading patterns, holding behavior, and risk profile.',
+    detail: 'We analyze: wallet age, transaction count, frequency, ETH balance, options and margin intensity, holding behavior, and risk appetite.',
   },
   {
     n: '03',
     title: 'WARRIOR GENERATION',
-    desc: 'Your unique warrior is deterministically generated from your wallet data. The same wallet always generates the same base warrior.',
+    desc: 'Your unique warrior is deterministically generated from your wallet telemetry. The same wallet always summons the same gladiator.',
     icon: '⚔️',
-    detail: '12 archetypes available: DEGEN, WHALE, DIAMOND HANDS, PAPER HANDS, NFT HUNTER, DEFI MAGE, MEME LORD, RUG SURVIVOR, SOLANA SAMURAI, ON-CHAIN ORACLE, SHADOW TRADER, SPEED DEMON.',
+    detail: '12 combat archetypes: OPTIONS DEGEN, ROBINHOOD WHALE, DIAMOND HANDS, PAPER HANDS, NFT HUNTER, DEFI MAGE, MEME LORD, MARGIN SURVIVOR, ROBINHOOD GOLD, ON-CHAIN ORACLE, SHADOW TRADER, SPEED DEMON.',
   },
   {
     n: '04',
-    title: 'BATTLE OTHER WALLETS',
-    desc: 'Enter a wallet address to challenge any Solana user. The battle is calculated on the backend using deterministic algorithms.',
+    title: 'BATTLE IN THE ARENA',
+    desc: 'Enter any 0x wallet address or Robinhood username to challenge rival traders. The combat engine runs deterministically.',
     icon: '⚡',
-    detail: 'Battle results are fully deterministic - no randomness from the frontend. The backend runs the battle engine and returns the certified result.',
+    detail: 'Battle results are fully certified and can be recorded on-chain on Robinhood Testnet.',
   },
   {
     n: '05',
     title: 'EARN XP & CLIMB',
-    desc: 'Win battles to earn XP, level up your warrior, unlock achievements, and climb the global leaderboard.',
+    desc: 'Win battles to earn XP, level up your warrior, unlock achievements, and climb the global Robinhood leaderboard.',
     icon: '🏆',
     detail: 'Win: +250 XP | Defeat: +50 XP | Daily Challenge: +500 XP | Achievement: variable XP',
   },
@@ -94,8 +94,8 @@ export default function HowItWorksPage() {
             <div>✅ We NEVER ask for your seed phrase</div>
             <div>✅ We NEVER automatically sign transactions</div>
             <div>✅ We ONLY read public blockchain data</div>
-            <div>✅ Your wallet is connected via official Solana Wallet Adapter</div>
-            <div>✅ Battle results are calculated on the backend, not frontend</div>
+            <div>✅ Your wallet is connected via standard EVM Web3 provider</div>
+            <div>✅ Native integration with Robinhood Network Testnet (Chain ID 46630)</div>
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 {
   "name": "wallet-wars",
   "version": "1.0.0",
-  "description": "Wallet Wars - Your Wallet Has a Fighter. A social on-chain battle game built around Solana wallets.",
+  "description": "Wallet Wars - Your Wallet Has a Fighter. A social on-chain battle game built on Robinhood Network (Chain ID 46630).",
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "build": "npm run build --prefix server && npm run build --prefix client",

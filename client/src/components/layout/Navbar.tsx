@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useEVMWallet } from '../../context/EVMWalletContext';
 import { useGame } from '../../context/GameContext';
 import { shortenAddress } from '../../utils';
+import RobinhoodWalletButton from './RobinhoodWalletButton';
 
 const NAV_LINKS = [
   { href: '/arena', label: 'ARENA' },
@@ -15,13 +15,13 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const location = useLocation();
-  const { publicKey } = useWallet();
+  const { account } = useEVMWallet();
   const { warrior, activeAccount, generateForAccount, isGenerating } = useGame();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [inputAccount, setInputAccount] = useState('');
 
-  const currentIdentifier = warrior?.walletAddress || activeAccount || publicKey?.toString();
+  const currentIdentifier = warrior?.walletAddress || activeAccount || account;
 
   const handleLinkAccount = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,9 +91,7 @@ export default function Navbar() {
                 {warrior ? 'SWITCH PROFILE' : 'LINK ROBINHOOD'}
               </button>
 
-              <div className="scale-90 origin-right">
-                <WalletMultiButton />
-              </div>
+              <RobinhoodWalletButton />
             </div>
 
             {/* Mobile menu button */}
@@ -145,7 +143,7 @@ export default function Navbar() {
                   ⚡ {warrior ? 'Switch Robinhood Profile' : 'Link Robinhood Profile'}
                 </button>
                 <div className="pt-2">
-                  <WalletMultiButton />
+                  <RobinhoodWalletButton />
                 </div>
               </div>
             </motion.div>

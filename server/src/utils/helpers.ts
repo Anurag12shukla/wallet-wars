@@ -1,22 +1,14 @@
-import { PublicKey } from '@solana/web3.js';
+import { getAddress, isAddress } from 'ethers';
 
 export function isValidRobinhoodOrWalletAddress(address: string): boolean {
   if (!address || typeof address !== 'string') return false;
-  const trimmed = address.trim();
+  const str = String(address).trim();
   
-  // Robinhood EVM Web3 Wallet (Arbitrum, Polygon, Ethereum)
-  if (/^0x[a-fA-F0-9]{40}$/.test(trimmed)) return true;
-  
-  // Robinhood username / account handle / profile ID (e.g. @anurag, wsb_trader, robinhood-whale)
-  if (/^@?[a-zA-Z0-9_\-\.]{3,44}$/.test(trimmed)) return true;
-  
-  // Solana / Base58 Crypto Address
-  try {
-    const pubkey = new PublicKey(trimmed);
-    return PublicKey.isOnCurve(pubkey.toBytes());
-  } catch {
-    return false;
-  }
+  if (str.startsWith('demo_')) return true;
+  if (isAddress(str)) return true;
+  if (/^@?[a-zA-Z0-9_\-\.]{3,44}$/.test(str)) return true;
+
+  return false;
 }
 
 // Retain alias for backward compatibility

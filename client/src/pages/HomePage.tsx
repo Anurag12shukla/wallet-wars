@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { useEVMWallet } from '../context/EVMWalletContext';
 import { useGame } from '../context/GameContext';
 import { useLeaderboard } from '../hooks/useLeaderboard';
 import { getStats } from '../services/api';
@@ -38,7 +37,7 @@ const ARCHETYPE_SHOWCASE = [
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { publicKey } = useWallet();
+  const { account } = useEVMWallet();
   const { warrior, generateForAccount, isGenerating, activeAccount } = useGame();
   const { entries: leaderboard } = useLeaderboard('overall', 5);
   const [stats, setStats] = useState<AppStats | null>(null);
@@ -99,7 +98,7 @@ export default function HomePage() {
               >
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-robinhood-green/30 bg-robinhood-green/10 text-robinhood-green text-xs font-mono mb-6 shadow-[0_0_15px_rgba(0,200,5,0.2)]">
                   <span className="w-2 h-2 rounded-full bg-robinhood-green animate-pulse" />
-                  ROBINHOOD PORTFOLIO ARENA
+                  LIVE ON ROBINHOOD TESTNET • CHAIN ID 46630
                 </div>
 
                 <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6">

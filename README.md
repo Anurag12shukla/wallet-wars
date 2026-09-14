@@ -88,7 +88,8 @@ Every warrior's combat specs are synthesized from portfolio and market telemetry
 
 ## ⚡ Key Features
 
-- 🏹 **Robinhood Profile Linker**: Enter your Robinhood handle (`@username`), Web3 wallet address (`0x...`), or Solana key to awaken your gladiator.
+- 🏹 **Robinhood Profile Linker**: Enter your Robinhood handle (`@username`), EVM Web3 wallet address (`0x...`), or trader account ID to awaken your gladiator.
+- 🌐 **Native Robinhood Network EVM**: Built for Robinhood Testnet (Chain ID `46630`) with live on-chain balance & nonce telemetry via ethers.js v6.
 - 🎮 **Instant Demo Gladiators**: Jump right into combat without connecting a wallet using preset fighters (0DTE Degen, Whale, Doge King, Gold VIP).
 - ⚔️ **Tactical Turn-Based Combat Engine**: Fast-paced simulations calculating initiative speed, damage mitigation, critical strikes, dodges, and round combat logs.
 - 🏆 **Global WallStreetBets Leaderboard**: Track highest win rates, combat wins, and active win streaks.
@@ -97,14 +98,38 @@ Every warrior's combat specs are synthesized from portfolio and market telemetry
 
 ---
 
+## 🌐 Robinhood Network Specification
+
+Wallet Wars is deployed on and integrated with the **Robinhood Network (Robinhood Testnet)**:
+
+| Parameter | Configuration |
+|:---|:---|
+| **Network Name** | `Robinhood Testnet` |
+| **Chain ID** | `46630` (`0xb626`) |
+| **RPC Endpoint** | `https://rpc.testnet.chain.robinhood.com` |
+| **Native Currency** | `ETH` (18 Decimals) |
+| **Block Explorer** | `https://explorer.testnet.chain.robinhood.com` |
+| **Smart Contract** | `WarriorArena.sol` (`contracts/WarriorArena.sol`) |
+
+### Adding Robinhood Testnet to Your Wallet
+The frontend includes a **1-click automatic network switcher**. Alternatively, you can add it manually to MetaMask or Robinhood Wallet:
+1. **Network Name**: Robinhood Testnet
+2. **New RPC URL**: `https://rpc.testnet.chain.robinhood.com`
+3. **Chain ID**: `46630`
+4. **Currency Symbol**: `ETH`
+5. **Block Explorer URL**: `https://explorer.testnet.chain.robinhood.com`
+
+---
+
 ## 🏗️ Full-Stack Architecture
 
 ```
 wallet-wars/
-├── client/                     # React 18 + Vite Frontend Application
+├── client/                     # React 18 + Vite Frontend (EVM Web3 Enabled)
 │   ├── src/
-│   │   ├── components/         # BattleScreen, WarriorCard, StatBar, Navbar, Footer
-│   │   ├── context/            # GameContext (Active Robinhood account, persistence)
+│   │   ├── components/         # BattleScreen, WarriorCard, StatBar, RobinhoodWalletButton
+│   │   ├── config/             # robinhood.ts (Chain 46630 params, 1-click switch)
+│   │   ├── context/            # EVMWalletContext, RobinhoodProvider, GameContext
 │   │   ├── hooks/              # useWarrior, useBattle, useLeaderboard
 │   │   ├── pages/              # Home, Arena, Battle, Warrior, Leaderboard, Achievements
 │   │   ├── services/           # Typed REST API Client
@@ -112,13 +137,16 @@ wallet-wars/
 │   └── tailwind.config.js      # Robinhood green (#00C805), dark grays, luxury gold
 ├── server/                     # Node.js + Express + TypeScript Backend
 │   ├── src/
-│   │   ├── config/             # Database & environment configuration
+│   │   ├── config/             # Robinhood RPC (Chain 46630) & MongoDB configuration
 │   │   ├── controllers/        # Wallet, Warrior, Battle, Leaderboard, Game
 │   │   ├── models/             # Mongoose Schemas (Warrior, Battle, Challenge, Achievement)
 │   │   ├── routes/             # REST API endpoints
-│   │   ├── services/           # warriorGenerator.ts, walletAnalysis.ts, battleEngine.ts
+│   │   ├── services/           # warriorGenerator.ts, walletAnalysis.ts (ethers v6), battleEngine.ts
 │   │   └── scripts/            # seed.ts (Seeded Robinhood Arena Gladiators)
 │   └── package.json
+├── contracts/                  # Solidity Smart Contracts (Robinhood Testnet)
+│   ├── WarriorArena.sol        # On-chain warrior registry & certified battle logger
+│   └── deployments.json        # Contract addresses & network metadata
 ├── assets/                     # Brand identity (banner.png, logo.jpg)
 └── vercel.json                 # Production serverless deployment configuration
 ```
@@ -157,7 +185,11 @@ Ensure `server/.env` includes:
 ```ini
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/wallet-wars
+ROBINHOOD_RPC_URL=https://rpc.testnet.chain.robinhood.com
+ROBINHOOD_CHAIN_ID=46630
+ROBINHOOD_NETWORK=testnet
 CLIENT_URL=http://localhost:5173
+JWT_SECRET=your_secret_key_here
 NODE_ENV=development
 ```
 

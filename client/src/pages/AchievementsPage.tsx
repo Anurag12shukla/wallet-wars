@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useEVMWallet } from '../context/EVMWalletContext';
 import { getAchievements } from '../services/api';
 import type { Achievement } from '../types';
 import { getRarityMeta } from '../utils';
 
 export default function AchievementsPage() {
-  const { publicKey } = useWallet();
+  const { account } = useEVMWallet();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'unlocked' | 'locked'>('all');
 
   useEffect(() => {
-    getAchievements(publicKey?.toString())
+    getAchievements(account || undefined)
       .then(res => { if (res.success && res.data) setAchievements(res.data); })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [publicKey]);
+  }, [account]);
 
   const filtered = achievements.filter(a => {
     if (filter === 'unlocked') return a.unlocked;
@@ -33,7 +33,7 @@ export default function AchievementsPage() {
           <h1 className="text-section text-white mb-2">
             <span className="gradient-text">ACHIEVEMENTS</span>
           </h1>
-          {publicKey && (
+          {account && (
             <p className="text-gray-400">{unlockedCount}/{achievements.length} unlocked</p>
           )}
         </motion.div>

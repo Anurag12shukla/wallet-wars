@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { SolanaProvider } from './context/SolanaProvider';
+import { RobinhoodProvider } from './context/RobinhoodProvider';
 import { GameProvider } from './context/GameContext';
 import Layout from './layouts/Layout';
 import LoadingScreen from './components/shared/LoadingScreen';
@@ -17,7 +17,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App() {
   return (
-    <SolanaProvider>
+    <RobinhoodProvider>
       <GameProvider>
         <BrowserRouter>
           <Suspense fallback={<LoadingScreen message="LOADING ARENA..." />}>
@@ -37,7 +37,7 @@ function App() {
           </Suspense>
         </BrowserRouter>
       </GameProvider>
-    </SolanaProvider>
+    </RobinhoodProvider>
   );
 }
 

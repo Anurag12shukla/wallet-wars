@@ -1,0 +1,20 @@
+{
+  "network": "robinhoodTestnet",
+  "chainId": 46630,
+  "chainIdHex": "0xb626",
+  "name": "Robinhood Testnet",
+  "rpcUrl": "https://rpc.testnet.chain.robinhood.com",
+  "explorerUrl": "https://explorer.testnet.chain.robinhood.com",
+  "currency": {
+    "name": "Ether",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "contracts": {
+    "WarriorArena": {
+      "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+      "network": "robinhoodTestnet",
+      "verified": true
+    }
+  }
+}

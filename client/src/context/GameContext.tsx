@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
+import { useEVMWallet } from './EVMWalletContext';
 import type { Warrior } from '../types';
 import { generateWarrior } from '../services/api';
 
@@ -20,7 +20,7 @@ interface GameContextState {
 const GameContext = createContext<GameContextState | null>(null);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
-  const { publicKey } = useSolanaWallet();
+  const { account } = useEVMWallet();
   const [activeAccount, setActiveAccountState] = useState<string | null>(() => {
     return localStorage.getItem('robinhood_active_account') || null;
   });
@@ -38,15 +38,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const generateForAccount = useCallback(async (account: string): Promise<Warrior | null> => {
-    if (!account) return null;
+  const generateForAccount = useCallback(async (accountIdentifier: string): Promise<Warrior | null> => {
+    if (!accountIdentifier) return null;
     setIsGenerating(true);
     setError(null);
     try {
-      const res = await generateWarrior(account.trim());
+      const res = await generateWarrior(accountIdentifier.trim());
       if (res.success && res.data) {
         setWarrior(res.data.warrior);
-        setActiveAccount(account.trim());
+        setActiveAccount(accountIdentifier.trim());
         return res.data.warrior;
       }
       return null;
@@ -60,19 +60,19 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, [setActiveAccount]);
 
   const generateCurrentWarrior = useCallback(async () => {
-    const target = publicKey?.toString() || activeAccount;
+    const target = account || activeAccount;
     if (!target) return;
     await generateForAccount(target);
-  }, [publicKey, activeAccount, generateForAccount]);
+  }, [account, activeAccount, generateForAccount]);
 
-  // Auto-load warrior on mount if activeAccount or publicKey exists
+  // Auto-load warrior on mount or when EVM account connects
   useEffect(() => {
-    if (publicKey) {
-      generateForAccount(publicKey.toString());
+    if (account) {
+      generateForAccount(account);
     } else if (activeAccount && !warrior) {
       generateForAccount(activeAccount);
     }
-  }, [publicKey]);
+  }, [account]);
 
   const clearError = useCallback(() => setError(null), []);
   const toggleSound = useCallback(() => setSoundEnabled(prev => !prev), []);

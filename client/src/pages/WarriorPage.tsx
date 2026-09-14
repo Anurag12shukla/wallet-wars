@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useEVMWallet } from '../context/EVMWalletContext';
 import { getWarrior } from '../services/api';
 import { getAchievements } from '../services/api';
 import type { Warrior, Achievement } from '../types';
@@ -11,12 +11,12 @@ import LoadingScreen from '../components/shared/LoadingScreen';
 
 export default function WarriorPage() {
   const { wallet } = useParams<{ wallet: string }>();
-  const { publicKey } = useWallet();
+  const { account } = useEVMWallet();
   const [warrior, setWarrior] = useState<Warrior | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const isMyWarrior = publicKey?.toString() === wallet;
+  const isMyWarrior = account?.toLowerCase() === wallet?.toLowerCase();
 
   useEffect(() => {
     if (!wallet) return;
@@ -109,7 +109,19 @@ export default function WarriorPage() {
           <h1 className="font-display text-5xl md:text-7xl text-white mb-2" style={{ textShadow: `0 0 30px ${meta.color}40` }}>
             {warrior.name}
           </h1>
-          <p className="text-gray-400 font-mono text-sm">{shortenAddress(warrior.walletAddress, 6)}</p>
+          {warrior.walletAddress.startsWith('0x') ? (
+            <a
+              href={`https://explorer.testnet.chain.robinhood.com/address/${warrior.walletAddress}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-robinhood-green font-mono text-sm inline-flex items-center gap-1 transition-colors"
+            >
+              <span>{shortenAddress(warrior.walletAddress, 6)}</span>
+              <span className="text-xs text-robinhood-green">↗ Robinhood Testnet</span>
+            </a>
+          ) : (
+            <p className="text-gray-400 font-mono text-sm">{shortenAddress(warrior.walletAddress, 6)}</p>
+          )}
 
           {/* Level & XP */}
           <div className="mt-6 max-w-sm mx-auto">

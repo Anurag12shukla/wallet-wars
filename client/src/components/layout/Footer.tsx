@@ -13,7 +13,7 @@ export default function Footer() {
             </span>
           </div>
           <p className="text-gray-500 text-sm text-center">
-            Built on Solana. Your wallet is your warrior.
+            Built on Robinhood Network (Chain ID 46630). Your wallet is your warrior.
           </p>
           <div className="flex items-center gap-6">
             <Link to="/how-it-works" className="text-gray-400 hover:text-white text-sm transition-colors">
