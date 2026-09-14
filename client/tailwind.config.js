@@ -7,26 +7,37 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Robinhood Design Tokens
+        robinhood: {
+          green: '#00C805',
+          'green-light': '#00e006',
+          'green-dark': '#009604',
+          red: '#ff5000',
+          'red-light': '#ff6e26',
+          gold: '#ffdf00',
+          dark: '#0c0d0e',
+          darker: '#060708',
+          card: '#14171a',
+          'card-hover': '#1b1f24',
+          border: '#24292e',
+          'border-active': '#30363d',
+        },
         // Wallet Wars design system
         brand: {
+          green: '#00C805',
           purple: '#9945FF',
-          cyan: '#14F195',
-          dark: '#0a0a0f',
-          darker: '#060609',
-          card: '#12121a',
-          border: '#1e1e2e',
-        },
-        solana: {
-          purple: '#9945FF',
-          green: '#14F195',
-          blue: '#4A90D9',
+          cyan: '#00C805',
+          dark: '#0c0d0e',
+          darker: '#060708',
+          card: '#14171a',
+          border: '#24292e',
         },
         rarity: {
           common: '#8b8b8b',
-          uncommon: '#14F195',
+          uncommon: '#00C805',
           rare: '#4A90D9',
           epic: '#9945FF',
-          legendary: '#FFD700',
+          legendary: '#ffdf00',
         },
       },
       fontFamily: {

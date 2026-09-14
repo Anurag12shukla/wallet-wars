@@ -4,17 +4,21 @@
 @tailwind utilities;
 
 :root {
-  --brand-purple: #9945FF;
-  --brand-cyan: #14F195;
-  --brand-dark: #0a0a0f;
-  --brand-darker: #060609;
-  --brand-card: #12121a;
-  --brand-border: #1e1e2e;
+  --robinhood-green: #00C805;
+  --robinhood-green-glow: rgba(0, 200, 5, 0.35);
+  --robinhood-red: #ff5000;
+  --robinhood-gold: #ffdf00;
+  --brand-purple: #00C805;
+  --brand-cyan: #00C805;
+  --brand-dark: #0c0d0e;
+  --brand-darker: #060708;
+  --brand-card: #14171a;
+  --brand-border: #24292e;
   --rarity-common: #8b8b8b;
-  --rarity-uncommon: #14F195;
+  --rarity-uncommon: #00C805;
   --rarity-rare: #4A90D9;
   --rarity-epic: #9945FF;
-  --rarity-legendary: #FFD700;
+  --rarity-legendary: #ffdf00;
 }
 
 * {
@@ -28,7 +32,7 @@ html {
 }
 
 body {
-  background-color: #060609;
+  background-color: #060708;
   color: #ffffff;
   font-family: 'Inter', system-ui, sans-serif;
   overflow-x: hidden;
@@ -40,14 +44,14 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--brand-darker);
+  background: #060708;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(153, 69, 255, 0.4);
+  background: rgba(0, 200, 5, 0.4);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--brand-purple);
+  background: #00C805;
 }
 
 /* Game bg noise */
@@ -56,8 +60,8 @@ body::before {
   position: fixed;
   inset: 0;
   background-image: 
-    radial-gradient(ellipse at 20% 50%, rgba(153, 69, 255, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(20, 241, 149, 0.04) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(0, 200, 5, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 223, 0, 0.04) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }

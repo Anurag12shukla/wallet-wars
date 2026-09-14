@@ -17,132 +17,159 @@ const SCAN_STEPS = [
   'SUMMONING WARRIOR...',
 ];
 
+const TICKERS = [
+  { symbol: '$BTC', price: '$68,420', change: '+4.2%', isUp: true },
+  { symbol: '$NVDA', price: '$128.50', change: '+6.8%', isUp: true },
+  { symbol: '$DOGE', price: '$0.165', change: '+14.2%', isUp: true },
+  { symbol: '$SPY', price: '$560.10', change: '+0.8%', isUp: true },
+  { symbol: '$ETH', price: '$2,640', change: '+3.5%', isUp: true },
+  { symbol: '$TSLA', price: '$248.80', change: '+5.4%', isUp: true },
+  { symbol: 'ROBINHOOD GOLD', price: '5.0% APY', change: 'MAX YIELD', isUp: true },
+];
+
 const ARCHETYPE_SHOWCASE = [
-  { archetype: 'WHALE', name: 'THE LEVIATHAN', level: 18 },
-  { archetype: 'DEGEN', name: 'DEGEN PRIME', level: 12 },
-  { archetype: 'SOLANA_SAMURAI', name: 'THE SOL SAMURAI', level: 21 },
-  { archetype: 'DEFI_MAGE', name: 'YIELD ORACLE', level: 15 },
+  { archetype: 'OPTIONS_DEGEN', name: '0DTE GAMMA TITAN', level: 14 },
+  { archetype: 'ROBINHOOD_WHALE', name: 'THE ROBINHOOD LEVIATHAN', level: 20 },
+  { archetype: 'DIAMOND_HANDS', name: 'DIAMOND WRAITH', level: 16 },
+  { archetype: 'DOGE_KING', name: 'DOGE MOON LORD', level: 12 },
+  { archetype: 'ROBINHOOD_GOLD', name: 'ROBINHOOD GOLD ARCHON', level: 18 },
+  { archetype: 'MARGIN_SURVIVOR', name: 'THE MARGIN REAPER', level: 15 },
 ];
 
 export default function HomePage() {
   const navigate = useNavigate();
   const { publicKey } = useWallet();
-  const { warrior } = useGame();
+  const { warrior, generateForAccount, isGenerating, activeAccount } = useGame();
   const { entries: leaderboard } = useLeaderboard('overall', 5);
   const [stats, setStats] = useState<AppStats | null>(null);
   const [currentShowcase, setCurrentShowcase] = useState(0);
+  const [quickInput, setQuickInput] = useState('');
 
   useEffect(() => {
     getStats().then(res => res.success && res.data && setStats(res.data));
     const interval = setInterval(() => {
       setCurrentShowcase(prev => (prev + 1) % ARCHETYPE_SHOWCASE.length);
-    }, 3000);
+    }, 3200);
     return () => clearInterval(interval);
   }, []);
 
-  const handleEnterArena = () => {
-    if (publicKey) navigate('/arena');
-    else navigate('/arena');
+  const handleQuickSummon = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickInput.trim()) {
+      navigate('/arena');
+      return;
+    }
+    await generateForAccount(quickInput.trim());
+    navigate('/arena');
   };
 
   const showcase = ARCHETYPE_SHOWCASE[currentShowcase];
   const showcaseMeta = getArchetypeMeta(showcase.archetype);
 
   return (
-    <div className="relative overflow-hidden">
-      {/* HERO SECTION */}
-      <section className="min-h-screen flex items-center relative overflow-hidden pt-8">
-        {/* Background particles */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="particle absolute w-1 h-1 rounded-full bg-brand-purple"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                opacity: 0.3 + Math.random() * 0.4,
-                width: `${2 + Math.random() * 4}px`,
-                height: `${2 + Math.random() * 4}px`,
-              }}
-              animate={{
-                y: [0, -30, 0],
-                opacity: [0.3, 0.8, 0.3],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 4,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-              }}
-            />
+    <div className="relative overflow-hidden bg-robinhood-darker">
+      {/* ROBINHOOD LIVE MARKET TICKER */}
+      <div className="w-full bg-black/70 border-b border-robinhood-border py-2 px-4 overflow-x-auto whitespace-nowrap scrollbar-none flex items-center gap-8 justify-between text-xs font-mono">
+        <div className="flex items-center gap-8 animate-none sm:animate-marquee">
+          {TICKERS.map((t, idx) => (
+            <div key={idx} className="flex items-center gap-2">
+              <span className="text-gray-300 font-bold">{t.symbol}</span>
+              <span className="text-gray-400">{t.price}</span>
+              <span className={t.isUp ? 'text-robinhood-green font-semibold' : 'text-robinhood-red font-semibold'}>
+                {t.change}
+              </span>
+            </div>
           ))}
         </div>
+      </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+      {/* HERO SECTION */}
+      <section className="min-h-[85vh] flex items-center relative overflow-hidden pt-6 pb-16">
+        {/* Ambient glow */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-robinhood-green/10 rounded-full blur-[140px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
             {/* Left: Hero text */}
-            <div>
+            <div className="lg:col-span-7">
               <motion.div
-                initial={{ opacity: 0, x: -40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, ease: 'easeOut' }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-purple/30 bg-brand-purple/10 text-brand-cyan text-xs font-mono mb-6">
-                  <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
-                  LIVE ON SOLANA DEVNET
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-robinhood-green/30 bg-robinhood-green/10 text-robinhood-green text-xs font-mono mb-6 shadow-[0_0_15px_rgba(0,200,5,0.2)]">
+                  <span className="w-2 h-2 rounded-full bg-robinhood-green animate-pulse" />
+                  ROBINHOOD PORTFOLIO ARENA
                 </div>
 
-                <h1 className="text-hero mb-6">
-                  <span className="block text-white">YOUR</span>
-                  <span className="block text-white">WALLET</span>
-                  <span className="block gradient-text">HAS A</span>
-                  <span className="block text-white">FIGHTER.</span>
+                <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6">
+                  <span className="block text-white">YOUR ROBINHOOD</span>
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-robinhood-green via-emerald-400 to-yellow-300">
+                    PORTFOLIO
+                  </span>
+                  <span className="block text-white">HAS A FIGHTER.</span>
                 </h1>
 
-                <p className="text-gray-300 text-lg mb-8 leading-relaxed max-w-md">
-                  Turn your Solana wallet into an RPG warrior. Battle other wallets,
-                  earn XP, unlock achievements, and climb the arena.
+                <p className="text-gray-300 text-base sm:text-lg mb-8 leading-relaxed max-w-xl">
+                  Transform your Robinhood trading activity, stock holdings, crypto positions, and buying power into a living on-chain combat gladiator. Battle other traders for arena supremacy.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <motion.button
-                    onClick={handleEnterArena}
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="btn-primary text-lg px-8 py-4"
-                    id="enter-arena-btn"
-                  >
-                    ⚔️ ENTER THE ARENA
-                  </motion.button>
+                {/* Instant Profile Summoner */}
+                <div className="bg-robinhood-card border border-robinhood-border rounded-2xl p-4 sm:p-5 max-w-xl shadow-[0_0_25px_rgba(0,0,0,0.5)] mb-8">
+                  <form onSubmit={handleQuickSummon} className="flex flex-col sm:flex-row gap-3">
+                    <input
+                      type="text"
+                      value={quickInput}
+                      onChange={(e) => setQuickInput(e.target.value)}
+                      placeholder="Enter Robinhood username or wallet (e.g. @wsb_god)"
+                      className="flex-1 px-4 py-3 rounded-xl bg-black/60 border border-robinhood-border focus:border-robinhood-green focus:outline-none text-white text-sm font-mono placeholder-gray-500"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isGenerating}
+                      className="px-6 py-3 rounded-xl bg-robinhood-green text-black font-display font-bold text-sm tracking-wider hover:bg-robinhood-green-light transition-all shadow-[0_0_15px_rgba(0,200,5,0.3)] disabled:opacity-50 whitespace-nowrap"
+                    >
+                      {isGenerating ? 'SUMMONING...' : '⚔️ SUMMON & BATTLE'}
+                    </button>
+                  </form>
 
-                  <Link
-                    to="/arena"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate('/arena', { state: { demo: true } });
-                    }}
-                    className="btn-secondary text-lg px-8 py-4 text-center"
-                    id="demo-battle-btn"
-                  >
-                    🎮 PLAY DEMO BATTLE
-                  </Link>
+                  <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-robinhood-border/40 text-xs">
+                    <span className="text-gray-400 font-mono text-[11px]">DEMO TRADERS:</span>
+                    {[
+                      { name: '0DTE Degen', id: 'demo_options_001' },
+                      { name: 'RH Whale', id: 'demo_whale_001' },
+                      { name: 'Doge King', id: 'demo_doge_001' },
+                      { name: 'Gold VIP', id: 'demo_gold_001' },
+                    ].map(demo => (
+                      <button
+                        key={demo.id}
+                        onClick={async () => {
+                          await generateForAccount(demo.id);
+                          navigate('/arena');
+                        }}
+                        className="px-2.5 py-1 rounded-md bg-black/50 border border-robinhood-border hover:border-robinhood-green/60 text-gray-300 hover:text-white transition-all font-mono text-[11px]"
+                      >
+                        {demo.name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
-                {/* Stats */}
+                {/* Platform Stats */}
                 {stats && (
-                  <div className="flex gap-8 mt-10">
+                  <div className="flex flex-wrap gap-8">
                     <div>
-                      <p className="text-2xl font-display text-brand-purple">{formatNumber(stats.totalWarriors)}</p>
-                      <p className="text-xs text-gray-500 font-mono">WARRIORS</p>
+                      <p className="text-2xl font-display font-bold text-robinhood-green">{formatNumber(stats.totalWarriors)}</p>
+                      <p className="text-xs text-gray-400 font-mono">GLADIATORS</p>
                     </div>
                     <div>
-                      <p className="text-2xl font-display text-brand-cyan">{formatNumber(stats.totalBattles)}</p>
-                      <p className="text-xs text-gray-500 font-mono">BATTLES</p>
+                      <p className="text-2xl font-display font-bold text-emerald-400">{formatNumber(stats.totalBattles)}</p>
+                      <p className="text-xs text-gray-400 font-mono">BATTLES FOUGHT</p>
                     </div>
                     {stats.topWarrior && (
                       <div>
-                        <p className="text-2xl font-display text-yellow-400">{stats.topWarrior.name?.split(' ').slice(-1)[0]}</p>
-                        <p className="text-xs text-gray-500 font-mono">TOP WARRIOR</p>
+                        <p className="text-2xl font-display font-bold text-yellow-400">{stats.topWarrior.name}</p>
+                        <p className="text-xs text-gray-400 font-mono">REIGNING CHAMPION</p>
                       </div>
                     )}
                   </div>
@@ -151,12 +178,7 @@ export default function HomePage() {
             </div>
 
             {/* Right: Showcase card */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
-              className="hidden lg:flex items-center justify-center"
-            >
+            <div className="lg:col-span-5 flex justify-center">
               <div className="relative">
                 {/* Outer glow */}
                 <motion.div
@@ -210,50 +232,13 @@ export default function HomePage() {
                   </div>
                 </motion.div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="py-24 border-t border-brand-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-section text-center mb-16 text-white"
-          >
-            HOW <span className="gradient-text">IT WORKS</span>
-          </motion.h2>
-
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { step: '01', icon: '🔗', title: 'CONNECT', desc: 'Connect your Solana wallet. Phantom, Solflare, or Backpack.' },
-              { step: '02', icon: '🔍', title: 'SCAN', desc: 'We analyze your wallet\'s on-chain history and behavior.' },
-              { step: '03', icon: '⚔️', title: 'AWAKEN', desc: 'Your warrior is generated from your actual wallet activity.' },
-              { step: '04', icon: '🏆', title: 'BATTLE', desc: 'Fight other wallets, earn XP, unlock achievements.' },
-            ].map((item, i) => (
-              <motion.div
-                key={item.step}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="glass-card p-6 text-center glass-card-hover"
-              >
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <div className="text-xs font-mono text-brand-purple mb-2">{item.step}</div>
-                <h3 className="font-display text-xl text-white mb-2">{item.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ARCHETYPES */}
-      <section className="py-24 border-t border-brand-border">
+      <section className="py-24 border-t border-robinhood-border bg-black/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -261,47 +246,90 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-section text-white mb-4">WARRIOR <span className="gradient-text">ARCHETYPES</span></h2>
-            <p className="text-gray-400">12 unique archetypes. Which one are you?</p>
+            <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white mb-4">
+              HOW IT <span className="text-robinhood-green">WORKS</span>
+            </h2>
+            <p className="text-gray-400 max-w-xl mx-auto text-sm sm:text-base">
+              The on-chain translation from financial market activity to RPG arena combat stats.
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { archetype: 'DEGEN', emoji: '🦍' },
-              { archetype: 'WHALE', emoji: '🐋' },
-              { archetype: 'DIAMOND_HANDS', emoji: '💎' },
-              { archetype: 'NFT_HUNTER', emoji: '🎨' },
-              { archetype: 'DEFI_MAGE', emoji: '🔮' },
-              { archetype: 'RUG_SURVIVOR', emoji: '💀' },
-              { archetype: 'MEME_LORD', emoji: '🚀' },
-              { archetype: 'SOLANA_SAMURAI', emoji: '⚔️' },
-              { archetype: 'ON_CHAIN_ORACLE', emoji: '🔭' },
-              { archetype: 'SHADOW_TRADER', emoji: '👤' },
-              { archetype: 'SPEED_DEMON', emoji: '⚡' },
-              { archetype: 'PAPER_HANDS', emoji: '📄' },
-            ].map((item, i) => {
-              const meta = getArchetypeMeta(item.archetype);
+              { step: '01', icon: '🏹', title: 'LINK', desc: 'Enter your Robinhood username, Web3 address (0x...), or choose a trader profile.' },
+              { step: '02', icon: '📊', title: 'ANALYZE', desc: 'Our engine evaluates buying power, stock & crypto diversity, and options leverage.' },
+              { step: '03', icon: '⚔️', title: 'SYNTHESIZE', desc: 'Your gladiator is created with combat stats, signature traits, and personality.' },
+              { step: '04', icon: '🏆', title: 'CONQUER', desc: 'Clash in tactical turn-based arena battles to climb the WallStreetBets leaderboard.' },
+            ].map((item, i) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-robinhood-card border border-robinhood-border hover:border-robinhood-green/50 p-6 rounded-2xl text-center transition-all group"
+              >
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{item.icon}</div>
+                <div className="text-xs font-mono text-robinhood-green mb-2">{item.step}</div>
+                <h3 className="font-display text-xl text-white mb-2">{item.title}</h3>
+                <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ARCHETYPES */}
+      <section className="py-24 border-t border-robinhood-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white mb-4">
+              TRADER <span className="text-robinhood-green">ARCHETYPES</span>
+            </h2>
+            <p className="text-gray-400 max-w-lg mx-auto text-sm sm:text-base">
+              10 iconic Robinhood & WallStreetBets trading classes. What is your combat destiny?
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {[
+              { archetype: 'OPTIONS_DEGEN', emoji: '📈', label: '0DTE Degen' },
+              { archetype: 'ROBINHOOD_WHALE', emoji: '🐋', label: 'RH Whale' },
+              { archetype: 'DIAMOND_HANDS', emoji: '💎', label: 'Diamond Hands' },
+              { archetype: 'DOGE_KING', emoji: '🐕', label: 'Doge King' },
+              { archetype: 'INDEX_MAXI', emoji: '📊', label: 'Index Maxi' },
+              { archetype: 'MARGIN_SURVIVOR', emoji: '🩸', label: 'Margin Survivor' },
+              { archetype: 'ROBINHOOD_GOLD', emoji: '👑', label: 'Gold VIP' },
+              { archetype: 'DAY_TRADER', emoji: '⚡', label: 'Day Trader' },
+              { archetype: 'PAPER_HANDS', emoji: '📄', label: 'Paper Hands' },
+              { archetype: 'ALGO_QUANT', emoji: '🤖', label: 'Algo Quant' },
+            ].map((arch) => {
+              const meta = getArchetypeMeta(arch.archetype);
               return (
-                <motion.div
-                  key={item.archetype}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="glass-card p-4 text-center glass-card-hover"
-                  style={{ borderColor: meta.color + '20' }}
+                <div
+                  key={arch.archetype}
+                  className="p-4 rounded-xl bg-robinhood-card border border-robinhood-border hover:border-robinhood-green/50 transition-all text-center group cursor-pointer"
+                  onClick={() => {
+                    navigate('/arena');
+                  }}
                 >
-                  <div className="text-3xl mb-2">{item.emoji}</div>
-                  <p className="text-xs font-display tracking-wider" style={{ color: meta.color }}>
-                    {item.archetype.replace('_', ' ')}
+                  <div className="text-3xl mb-2 group-hover:scale-125 transition-transform">{arch.emoji}</div>
+                  <h4 className="font-display text-sm font-bold text-white">{arch.label}</h4>
+                  <p className="text-[11px] font-mono mt-1 line-clamp-1" style={{ color: meta.color }}>
+                    {meta.ability}
                   </p>
-                </motion.div>
+                </div>
               );
             })}
           </div>
         </div>
       </section>
+
 
       {/* LEADERBOARD PREVIEW */}
       {leaderboard.length > 0 && (

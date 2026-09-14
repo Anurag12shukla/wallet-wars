@@ -8,119 +8,187 @@ export const ARCHETYPE_META: Record<string, {
   ability: string;
   bgColor: string;
 }> = {
-  DEGEN: {
-    color: '#ff4500',
-    gradient: 'from-orange-600 to-red-700',
-    emoji: '🦍',
-    description: 'High-frequency trader who lives on the edge.',
-    ability: 'CHAOS STRIKE',
-    bgColor: 'rgba(255, 69, 0, 0.1)',
+  OPTIONS_DEGEN: {
+    color: '#00C805',
+    gradient: 'from-green-500 to-emerald-700',
+    emoji: '📈',
+    description: '0DTE options caller with unpredictable gamma spikes.',
+    ability: 'GAMMA SQUEEZE',
+    bgColor: 'rgba(0, 200, 5, 0.12)',
   },
-  WHALE: {
+  ROBINHOOD_WHALE: {
     color: '#0077b6',
-    gradient: 'from-blue-600 to-blue-900',
+    gradient: 'from-blue-600 to-cyan-800',
     emoji: '🐋',
-    description: 'Massive wallet. Moves markets.',
-    ability: 'MARKET CRASH',
-    bgColor: 'rgba(0, 119, 182, 0.1)',
+    description: 'Seven-figure portfolio with massive buying power.',
+    ability: 'MARKET IMPACT',
+    bgColor: 'rgba(0, 119, 182, 0.12)',
   },
   DIAMOND_HANDS: {
-    color: '#00d4ff',
-    gradient: 'from-cyan-400 to-blue-600',
+    color: '#00e006',
+    gradient: 'from-emerald-400 to-teal-700',
     emoji: '💎',
-    description: 'Holds through every crash.',
-    ability: 'DIAMOND SHIELD',
-    bgColor: 'rgba(0, 212, 255, 0.1)',
+    description: 'Held through every crash. Unbreakable conviction.',
+    ability: 'HODL SHIELD',
+    bgColor: 'rgba(0, 224, 6, 0.12)',
+  },
+  DOGE_KING: {
+    color: '#ffdf00',
+    gradient: 'from-yellow-400 to-amber-600',
+    emoji: '🐕',
+    description: 'Rides Robinhood crypto to the moon. Much wow.',
+    ability: 'TO THE MOON',
+    bgColor: 'rgba(255, 223, 0, 0.12)',
+  },
+  INDEX_MAXI: {
+    color: '#10b981',
+    gradient: 'from-emerald-500 to-green-700',
+    emoji: '📊',
+    description: 'Buys $SPY & $VOO every week. Compounding machine.',
+    ability: 'COMPOUND INTEREST',
+    bgColor: 'rgba(16, 185, 129, 0.12)',
+  },
+  MARGIN_SURVIVOR: {
+    color: '#ff5000',
+    gradient: 'from-red-500 to-orange-700',
+    emoji: '🩸',
+    description: 'Survived 95% drawdown & instant margin calls.',
+    ability: 'LIQUIDATION RAGE',
+    bgColor: 'rgba(255, 80, 0, 0.12)',
+  },
+  ROBINHOOD_GOLD: {
+    color: '#ffd700',
+    gradient: 'from-yellow-300 to-amber-500',
+    emoji: '👑',
+    description: '5% APY cash sweep with boosted margin tier.',
+    ability: 'CASH SWEEP',
+    bgColor: 'rgba(255, 215, 0, 0.12)',
+  },
+  DAY_TRADER: {
+    color: '#06d6a0',
+    gradient: 'from-teal-400 to-emerald-600',
+    emoji: '⚡',
+    description: 'Charts 1-minute candles. First to strike at 9:30 AM.',
+    ability: 'BELL RINGER',
+    bgColor: 'rgba(6, 214, 160, 0.12)',
   },
   PAPER_HANDS: {
     color: '#ffd60a',
-    gradient: 'from-yellow-400 to-orange-500',
+    gradient: 'from-amber-300 to-yellow-500',
     emoji: '📄',
     description: 'Quick exits, quick attacks.',
-    ability: 'PAPER CUT',
-    bgColor: 'rgba(255, 214, 10, 0.1)',
+    ability: 'STOP LOSS',
+    bgColor: 'rgba(255, 214, 10, 0.12)',
+  },
+  ALGO_QUANT: {
+    color: '#9945ff',
+    gradient: 'from-purple-500 to-indigo-700',
+    emoji: '🤖',
+    description: 'Automated quantitative limits. Precision math.',
+    ability: 'LIMIT ARBITRAGE',
+    bgColor: 'rgba(153, 69, 255, 0.12)',
+  },
+  // Compatibility fallbacks
+  DEGEN: {
+    color: '#00C805',
+    gradient: 'from-green-500 to-emerald-700',
+    emoji: '📈',
+    description: '0DTE options caller with unpredictable gamma spikes.',
+    ability: 'GAMMA SQUEEZE',
+    bgColor: 'rgba(0, 200, 5, 0.12)',
+  },
+  WHALE: {
+    color: '#0077b6',
+    gradient: 'from-blue-600 to-cyan-800',
+    emoji: '🐋',
+    description: 'Massive portfolio. Moves markets.',
+    ability: 'MARKET IMPACT',
+    bgColor: 'rgba(0, 119, 182, 0.12)',
   },
   NFT_HUNTER: {
-    color: '#9b5de5',
-    gradient: 'from-purple-500 to-pink-600',
-    emoji: '🎨',
-    description: 'Collects rare digital art.',
-    ability: 'RARE DROP',
-    bgColor: 'rgba(155, 93, 229, 0.1)',
+    color: '#ffdf00',
+    gradient: 'from-yellow-400 to-amber-600',
+    emoji: '🐕',
+    description: 'Rides Robinhood crypto to the moon.',
+    ability: 'TO THE MOON',
+    bgColor: 'rgba(255, 223, 0, 0.12)',
   },
   DEFI_MAGE: {
-    color: '#7400b8',
-    gradient: 'from-violet-600 to-purple-900',
-    emoji: '🔮',
-    description: 'Masters liquidity and yields.',
-    ability: 'YIELD DRAIN',
-    bgColor: 'rgba(116, 0, 184, 0.1)',
+    color: '#9945ff',
+    gradient: 'from-purple-500 to-indigo-700',
+    emoji: '🤖',
+    description: 'Automated quantitative limits.',
+    ability: 'LIMIT ARBITRAGE',
+    bgColor: 'rgba(153, 69, 255, 0.12)',
   },
   MEME_LORD: {
-    color: '#ff006e',
-    gradient: 'from-pink-500 to-rose-700',
-    emoji: '🚀',
+    color: '#ffdf00',
+    gradient: 'from-yellow-400 to-amber-600',
+    emoji: '🐕',
     description: 'Rides meme coins to the moon.',
     ability: 'TO THE MOON',
-    bgColor: 'rgba(255, 0, 110, 0.1)',
+    bgColor: 'rgba(255, 223, 0, 0.12)',
   },
   RUG_SURVIVOR: {
-    color: '#fb8500',
-    gradient: 'from-orange-500 to-amber-700',
-    emoji: '💀',
-    description: 'Survived multiple rug pulls.',
-    ability: 'BATTLE SCAR',
-    bgColor: 'rgba(251, 133, 0, 0.1)',
+    color: '#ff5000',
+    gradient: 'from-red-500 to-orange-700',
+    emoji: '🩸',
+    description: 'Survived multiple margin wipeouts.',
+    ability: 'LIQUIDATION RAGE',
+    bgColor: 'rgba(255, 80, 0, 0.12)',
   },
   SOLANA_SAMURAI: {
-    color: '#9945FF',
-    gradient: 'from-purple-500 to-violet-700',
-    emoji: '⚔️',
-    description: 'Native to Solana from genesis.',
-    ability: 'BUSHIDO SLASH',
-    bgColor: 'rgba(153, 69, 255, 0.1)',
+    color: '#ffd700',
+    gradient: 'from-yellow-300 to-amber-500',
+    emoji: '👑',
+    description: '5% APY cash sweep with boosted margin tier.',
+    ability: 'CASH SWEEP',
+    bgColor: 'rgba(255, 215, 0, 0.12)',
   },
   ON_CHAIN_ORACLE: {
-    color: '#4cc9f0',
-    gradient: 'from-sky-400 to-cyan-600',
-    emoji: '🔭',
-    description: 'Reads the blockchain like a crystal ball.',
-    ability: 'FORESIGHT',
-    bgColor: 'rgba(76, 201, 240, 0.1)',
+    color: '#10b981',
+    gradient: 'from-emerald-500 to-green-700',
+    emoji: '📊',
+    description: 'Buys $SPY & $VOO every week.',
+    ability: 'COMPOUND INTEREST',
+    bgColor: 'rgba(16, 185, 129, 0.12)',
   },
   SHADOW_TRADER: {
-    color: '#6c757d',
-    gradient: 'from-gray-500 to-slate-700',
-    emoji: '👤',
+    color: '#9945ff',
+    gradient: 'from-purple-500 to-indigo-700',
+    emoji: '🤖',
     description: 'Moves in darkness. Never announces.',
-    ability: 'SHADOW STRIKE',
-    bgColor: 'rgba(108, 117, 125, 0.1)',
+    ability: 'LIMIT ARBITRAGE',
+    bgColor: 'rgba(153, 69, 255, 0.12)',
   },
   SPEED_DEMON: {
     color: '#06d6a0',
-    gradient: 'from-emerald-400 to-green-600',
+    gradient: 'from-teal-400 to-emerald-600',
     emoji: '⚡',
-    description: 'Exploits every millisecond.',
-    ability: 'SPEED BURST',
-    bgColor: 'rgba(6, 214, 160, 0.1)',
+    description: 'Charts 1-minute candles.',
+    ability: 'BELL RINGER',
+    bgColor: 'rgba(6, 214, 160, 0.12)',
   },
 };
 
 export const RARITY_META: Record<Rarity, { color: string; glow: string; label: string }> = {
   COMMON: { color: '#8b8b8b', glow: 'rgba(139, 139, 139, 0.3)', label: 'Common' },
-  UNCOMMON: { color: '#14F195', glow: 'rgba(20, 241, 149, 0.4)', label: 'Uncommon' },
+  UNCOMMON: { color: '#00C805', glow: 'rgba(0, 200, 5, 0.4)', label: 'Uncommon' },
   RARE: { color: '#4A90D9', glow: 'rgba(74, 144, 217, 0.4)', label: 'Rare' },
   EPIC: { color: '#9945FF', glow: 'rgba(153, 69, 255, 0.5)', label: 'Epic' },
-  LEGENDARY: { color: '#FFD700', glow: 'rgba(255, 215, 0, 0.5)', label: 'Legendary' },
+  LEGENDARY: { color: '#FFD700', glow: 'rgba(255, 215, 0, 0.5)', label: 'Robinhood Gold' },
 };
 
 export function shortenAddress(address: string, chars = 4): string {
   if (!address) return '';
+  if (address.startsWith('@') || (!address.startsWith('0x') && address.length < 24)) {
+    return address.startsWith('@') ? address : `@${address}`;
+  }
   return `${address.slice(0, chars)}...${address.slice(-chars)}`;
 }
 
 export function getArchetypeMeta(archetype: string) {
-  return ARCHETYPE_META[archetype] || ARCHETYPE_META['DEGEN'];
+  return ARCHETYPE_META[archetype] || ARCHETYPE_META['OPTIONS_DEGEN'] || ARCHETYPE_META['DEGEN'];
 }
 
 export function getRarityMeta(rarity: Rarity) {
@@ -155,10 +223,16 @@ export function xpProgressPercent(xp: number, level: number): number {
   return Math.min(100, Math.max(0, (progress / needed) * 100));
 }
 
-export function isValidSolanaAddress(address: string): boolean {
+export function isValidRobinhoodOrWalletAddress(address: string): boolean {
+  if (!address || typeof address !== 'string') return false;
+  const trimmed = address.trim();
+  if (/^0x[a-fA-F0-9]{40}$/.test(trimmed)) return true;
+  if (/^@?[a-zA-Z0-9_\-\.]{3,44}$/.test(trimmed)) return true;
   const base58Regex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-  return base58Regex.test(address);
+  return base58Regex.test(trimmed);
 }
+
+export const isValidSolanaAddress = isValidRobinhoodOrWalletAddress;
 
 export function formatNumber(n: number): string {
   if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
@@ -174,16 +248,18 @@ export function formatWinRate(wins: number, losses: number): string {
 
 // Demo warriors for demo mode
 export const DEMO_WARRIORS = {
-  playerOne: 'demo_degen_001',
+  playerOne: 'demo_options_001',
   playerTwo: 'demo_whale_001',
   options: [
-    { wallet: 'demo_degen_001', name: 'DEGEN PRIME', archetype: 'DEGEN', emoji: '🦍' },
-    { wallet: 'demo_whale_001', name: 'THE GREAT LEVIATHAN', archetype: 'WHALE', emoji: '🐋' },
+    { wallet: 'demo_options_001', name: '0DTE GAMMA TITAN', archetype: 'OPTIONS_DEGEN', emoji: '📈' },
+    { wallet: 'demo_whale_001', name: 'THE ROBINHOOD LEVIATHAN', archetype: 'ROBINHOOD_WHALE', emoji: '🐋' },
     { wallet: 'demo_diamond_001', name: 'DIAMOND WRAITH', archetype: 'DIAMOND_HANDS', emoji: '💎' },
-    { wallet: 'demo_rug_001', name: 'THE RUG REAPER', archetype: 'RUG_SURVIVOR', emoji: '💀' },
-    { wallet: 'demo_nft_001', name: 'NFT HUNTER', archetype: 'NFT_HUNTER', emoji: '🎨' },
-    { wallet: 'demo_samurai_001', name: 'THE SOL SAMURAI', archetype: 'SOLANA_SAMURAI', emoji: '⚔️' },
-    { wallet: 'demo_shadow_001', name: 'CHAIN PHANTOM', archetype: 'SHADOW_TRADER', emoji: '👤' },
-    { wallet: 'demo_speed_001', name: 'TURBO BLITZ', archetype: 'SPEED_DEMON', emoji: '⚡' },
+    { wallet: 'demo_doge_001', name: 'DOGE MOON LORD', archetype: 'DOGE_KING', emoji: '🐕' },
+    { wallet: 'demo_bogle_001', name: 'BOGLE COMPOUND SAGE', archetype: 'INDEX_MAXI', emoji: '📊' },
+    { wallet: 'demo_margin_001', name: 'THE MARGIN REAPER', archetype: 'MARGIN_SURVIVOR', emoji: '🩸' },
+    { wallet: 'demo_gold_001', name: 'ROBINHOOD GOLD TITAN', archetype: 'ROBINHOOD_GOLD', emoji: '👑' },
+    { wallet: 'demo_day_001', name: '9:30 AM CANDLE SNIPER', archetype: 'DAY_TRADER', emoji: '⚡' },
+    { wallet: 'demo_paper_001', name: 'PAPER DASH GHOST', archetype: 'PAPER_HANDS', emoji: '📄' },
+    { wallet: 'demo_quant_001', name: 'DELTA QUANT MATRIX', archetype: 'ALGO_QUANT', emoji: '🤖' },
   ],
 };

@@ -51,7 +51,6 @@ const connectDB = async (): Promise<void> => {
     console.log(`✅ MongoDB Connected: ${memoryServer ? 'in-memory' : conn.connection.host}`);
     setupListeners();
   } catch (error) {
-  } catch (error) {
     console.error('❌ MongoDB connection failed:', error);
     if (!process.env.VERCEL) {
       process.exit(1);

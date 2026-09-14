@@ -1,8 +1,10 @@
 // Warrior Types
 export type Rarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 export type Archetype =
-  | 'DEGEN' | 'WHALE' | 'DIAMOND_HANDS' | 'PAPER_HANDS'
-  | 'NFT_HUNTER' | 'DEFI_MAGE' | 'MEME_LORD' | 'RUG_SURVIVOR'
+  | 'OPTIONS_DEGEN' | 'ROBINHOOD_WHALE' | 'DIAMOND_HANDS' | 'DOGE_KING'
+  | 'INDEX_MAXI' | 'MARGIN_SURVIVOR' | 'ROBINHOOD_GOLD' | 'DAY_TRADER'
+  | 'PAPER_HANDS' | 'ALGO_QUANT'
+  | 'DEGEN' | 'WHALE' | 'NFT_HUNTER' | 'DEFI_MAGE' | 'MEME_LORD' | 'RUG_SURVIVOR'
   | 'SOLANA_SAMURAI' | 'ON_CHAIN_ORACLE' | 'SHADOW_TRADER' | 'SPEED_DEMON';
 
 export interface WalletAnalysis {

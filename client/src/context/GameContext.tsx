@@ -8,6 +8,9 @@ interface GameContextState {
   setWarrior: (warrior: Warrior | null) => void;
   isGenerating: boolean;
   generateCurrentWarrior: () => Promise<void>;
+  generateForAccount: (account: string) => Promise<Warrior | null>;
+  activeAccount: string | null;
+  setActiveAccount: (acc: string | null) => void;
   error: string | null;
   clearError: () => void;
   soundEnabled: boolean;
@@ -18,35 +21,56 @@ const GameContext = createContext<GameContextState | null>(null);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const { publicKey } = useSolanaWallet();
+  const [activeAccount, setActiveAccountState] = useState<string | null>(() => {
+    return localStorage.getItem('robinhood_active_account') || null;
+  });
   const [warrior, setWarrior] = useState<Warrior | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(false);
 
-  const generateCurrentWarrior = useCallback(async () => {
-    if (!publicKey) return;
+  const setActiveAccount = useCallback((acc: string | null) => {
+    setActiveAccountState(acc);
+    if (acc) {
+      localStorage.setItem('robinhood_active_account', acc);
+    } else {
+      localStorage.removeItem('robinhood_active_account');
+    }
+  }, []);
+
+  const generateForAccount = useCallback(async (account: string): Promise<Warrior | null> => {
+    if (!account) return null;
     setIsGenerating(true);
     setError(null);
     try {
-      const res = await generateWarrior(publicKey.toString());
+      const res = await generateWarrior(account.trim());
       if (res.success && res.data) {
         setWarrior(res.data.warrior);
+        setActiveAccount(account.trim());
+        return res.data.warrior;
       }
+      return null;
     } catch (err: unknown) {
       const apiError = err as { error?: { message: string } };
       setError(apiError?.error?.message || 'Failed to generate warrior.');
+      return null;
     } finally {
       setIsGenerating(false);
     }
-  }, [publicKey]);
+  }, [setActiveAccount]);
 
-  // Auto-load warrior when wallet connects
+  const generateCurrentWarrior = useCallback(async () => {
+    const target = publicKey?.toString() || activeAccount;
+    if (!target) return;
+    await generateForAccount(target);
+  }, [publicKey, activeAccount, generateForAccount]);
+
+  // Auto-load warrior on mount if activeAccount or publicKey exists
   useEffect(() => {
-    if (publicKey && !warrior) {
-      generateCurrentWarrior();
-    }
-    if (!publicKey) {
-      setWarrior(null);
+    if (publicKey) {
+      generateForAccount(publicKey.toString());
+    } else if (activeAccount && !warrior) {
+      generateForAccount(activeAccount);
     }
   }, [publicKey]);
 
@@ -59,6 +83,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       setWarrior,
       isGenerating,
       generateCurrentWarrior,
+      generateForAccount,
+      activeAccount,
+      setActiveAccount,
       error,
       clearError,
       soundEnabled,

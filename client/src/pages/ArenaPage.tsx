@@ -63,7 +63,7 @@ export default function ArenaPage() {
   };
 
   const handleStartBattle = async () => {
-    const p1 = isDemo ? demoP1.wallet : publicKey?.toString();
+    const p1 = isDemo ? demoP1.wallet : (myWarrior?.walletAddress || publicKey?.toString());
     const p2 = isDemo ? demoP2.wallet : opponentWarrior?.walletAddress;
 
     if (!p1 || !p2) return;
@@ -248,65 +248,69 @@ export default function ArenaPage() {
             </motion.button>
           </motion.div>
         ) : (
-          /* WALLET BATTLE MODE */
+          /* WALLET / ROBINHOOD BATTLE MODE */
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Left: My Warrior */}
             <div>
-              <h2 className="font-display text-sm text-gray-400 tracking-widest mb-4">YOUR WARRIOR</h2>
-              {!publicKey ? (
-                <div className="glass-card p-8 text-center">
-                  <p className="text-4xl mb-4">🔗</p>
-                  <p className="text-white font-display text-lg mb-2">CONNECT YOUR WALLET</p>
-                  <p className="text-gray-400 text-sm mb-6">Connect to scan your wallet and generate your warrior.</p>
-                  <WalletMultiButton />
+              <h2 className="font-display text-sm text-gray-400 tracking-widest mb-4">YOUR GLADIATOR</h2>
+              {!myWarrior && !publicKey ? (
+                <div className="bg-robinhood-card border border-robinhood-border rounded-2xl p-8 text-center shadow-lg">
+                  <p className="text-4xl mb-4">🏹</p>
+                  <p className="text-white font-display text-lg mb-2">LINK YOUR ROBINHOOD PROFILE</p>
+                  <p className="text-gray-400 text-sm mb-6 max-w-sm mx-auto">
+                    Connect your Web3 wallet or link your Robinhood trading handle to generate your combat gladiator.
+                  </p>
+                  <div className="flex justify-center">
+                    <WalletMultiButton />
+                  </div>
                 </div>
               ) : isGenerating ? (
-                <div className="glass-card p-8 text-center">
+                <div className="bg-robinhood-card border border-robinhood-border rounded-2xl p-8 text-center">
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                    className="w-12 h-12 border-2 border-brand-purple border-t-transparent rounded-full mx-auto mb-4"
+                    className="w-12 h-12 border-2 border-robinhood-green border-t-transparent rounded-full mx-auto mb-4"
                   />
-                  <p className="font-display text-brand-purple animate-pulse">SUMMONING WARRIOR...</p>
+                  <p className="font-display text-robinhood-green animate-pulse">SYNTHESIZING GLADIATOR...</p>
                 </div>
               ) : myWarrior ? (
                 <WarriorCard warrior={myWarrior} showStats={true} glowing />
               ) : (
-                <div className="glass-card p-8 text-center">
-                  <p className="text-gray-400">Warrior not found.</p>
+                <div className="bg-robinhood-card border border-robinhood-border rounded-2xl p-8 text-center">
+                  <p className="text-gray-400">Gladiator profile not found.</p>
                 </div>
               )}
             </div>
 
             {/* Right: Opponent */}
             <div>
-              <h2 className="font-display text-sm text-gray-400 tracking-widest mb-4">OPPONENT</h2>
+              <h2 className="font-display text-sm text-gray-400 tracking-widest mb-4">ARENA OPPONENT</h2>
 
               {/* Search input */}
-              <div className="glass-card p-4 mb-4">
+              <div className="bg-robinhood-card border border-robinhood-border rounded-2xl p-4 mb-4">
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={opponentWallet}
                     onChange={e => { setOpponentWallet(e.target.value); setWalletError(''); }}
-                    placeholder="ENTER SOLANA WALLET..."
-                    className="flex-1 bg-transparent border border-brand-border rounded-lg px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-brand-purple placeholder-gray-600 transition-colors"
+                    placeholder="ENTER ROBINHOOD HANDLE OR WALLET..."
+                    className="flex-1 bg-black/60 border border-robinhood-border rounded-lg px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-robinhood-green placeholder-gray-500 transition-colors"
                     onKeyDown={e => e.key === 'Enter' && handleOpponentSearch()}
                     id="opponent-wallet-input"
                   />
                   <button
                     onClick={handleOpponentSearch}
                     disabled={opponentLoading}
-                    className="btn-primary px-4 py-3 text-sm"
+                    className="px-5 py-3 rounded-lg bg-robinhood-green text-black font-display font-bold text-sm tracking-wider hover:bg-robinhood-green-light transition-all shadow-[0_0_12px_rgba(0,200,5,0.25)]"
                   >
                     {opponentLoading ? (
                       <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        className="w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+                        className="w-4 h-4 border-2 border-black border-t-transparent rounded-full" />
                     ) : 'SCAN'}
                   </button>
                 </div>
                 {walletError && (
-                  <p className="text-red-400 text-xs font-mono mt-2">{walletError}</p>
+                  <p className="text-robinhood-red text-xs font-mono mt-2">{walletError}</p>
                 )}
               </div>
 
