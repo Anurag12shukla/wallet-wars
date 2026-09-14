@@ -1,0 +1,22 @@
+{
+  "name": "wallet-wars",
+  "version": "1.0.0",
+  "description": "Wallet Wars - Your Wallet Has a Fighter. A social on-chain battle game built around Solana wallets.",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix server && npm run build --prefix client",
+    "install-all": "npm install && npm install --prefix server && npm install --prefix client",
+    "seed": "npm run seed --prefix server",
+    "start": "npm start --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "overrides": {
+    "uuid": "9.0.1"
+  }
+}
