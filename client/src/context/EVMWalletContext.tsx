@@ -39,59 +39,90 @@ export function EVMWalletProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const initConnection = useCallback(async (ethereum: any) => {
+    if (!ethereum) return;
     try {
       const bp = new BrowserProvider(ethereum);
-      const network = await bp.getNetwork();
-      const currentChainId = Number(network.chainId);
-      setChainId(currentChainId);
       setProvider(bp);
 
-      const accounts = await bp.listAccounts();
-      if (accounts.length > 0) {
-        const activeSigner = await bp.getSigner();
-        const activeAddress = accounts[0].address;
-        setAccount(activeAddress);
-        setSigner(activeSigner);
-        await refreshBalance(activeAddress, bp);
-      } else {
-        setAccount(null);
-        setSigner(null);
-        setBalance(null);
+      try {
+        const network = await bp.getNetwork();
+        const currentChainId = Number(network.chainId);
+        setChainId(currentChainId);
+      } catch (netErr) {
+        console.warn('Could not determine chainId:', netErr);
       }
-    } catch (err: any) {
-      console.error('Error initializing EVM wallet connection:', err);
-    }
-  }, [refreshBalance]);
 
-  // Handle eager connection on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).ethereum) {
-      const ethereum = (window as any).ethereum;
-      initConnection(ethereum);
-
-      const handleAccountsChanged = (accounts: string[]) => {
-        if (accounts.length === 0) {
+      try {
+        const accounts = await bp.listAccounts();
+        if (accounts && accounts.length > 0) {
+          const activeSigner = await bp.getSigner();
+          const activeAddress = accounts[0].address;
+          setAccount(activeAddress);
+          setSigner(activeSigner);
+          await refreshBalance(activeAddress, bp);
+        } else {
           setAccount(null);
           setSigner(null);
           setBalance(null);
-        } else {
-          initConnection(ethereum);
         }
-      };
+      } catch (accErr) {
+        console.warn('Could not list accounts on init:', accErr);
+      }
+    } catch (err: any) {
+      console.warn('Error initializing EVM wallet connection:', err);
+    }
+  }, [refreshBalance]);
 
-      const handleChainChanged = () => {
+  // Handle eager connection on mount with defensive listener checking
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && (window as any).ethereum) {
+        const ethereum = (window as any).ethereum;
         initConnection(ethereum);
-      };
 
-      ethereum.on('accountsChanged', handleAccountsChanged);
-      ethereum.on('chainChanged', handleChainChanged);
+        const handleAccountsChanged = (accounts: string[]) => {
+          try {
+            if (!accounts || accounts.length === 0) {
+              setAccount(null);
+              setSigner(null);
+              setBalance(null);
+            } else {
+              initConnection(ethereum);
+            }
+          } catch (e) {
+            console.warn('handleAccountsChanged error:', e);
+          }
+        };
 
-      return () => {
-        if (ethereum.removeListener) {
-          ethereum.removeListener('accountsChanged', handleAccountsChanged);
-          ethereum.removeListener('chainChanged', handleChainChanged);
+        const handleChainChanged = () => {
+          try {
+            initConnection(ethereum);
+          } catch (e) {
+            console.warn('handleChainChanged error:', e);
+          }
+        };
+
+        if (typeof ethereum.on === 'function') {
+          ethereum.on('accountsChanged', handleAccountsChanged);
+          ethereum.on('chainChanged', handleChainChanged);
         }
-      };
+
+        return () => {
+          try {
+            if (typeof ethereum.removeListener === 'function') {
+              ethereum.removeListener('accountsChanged', handleAccountsChanged);
+              ethereum.removeListener('chainChanged', handleChainChanged);
+            } else if (typeof ethereum.off === 'function') {
+              ethereum.off('accountsChanged', handleAccountsChanged);
+              ethereum.off('chainChanged', handleChainChanged);
+            }
+          } catch (cleanErr) {
+            console.warn('Error cleaning up wallet listeners:', cleanErr);
+          }
+        };
+      }
+    } catch (mountErr) {
+      console.warn('EVMWalletProvider mount error:', mountErr);
     }
   }, [initConnection]);
 

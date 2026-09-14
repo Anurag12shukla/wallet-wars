@@ -22,7 +22,11 @@ const GameContext = createContext<GameContextState | null>(null);
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const { account } = useEVMWallet();
   const [activeAccount, setActiveAccountState] = useState<string | null>(() => {
-    return localStorage.getItem('robinhood_active_account') || null;
+    try {
+      return typeof window !== 'undefined' ? localStorage.getItem('robinhood_active_account') || null : null;
+    } catch {
+      return null;
+    }
   });
   const [warrior, setWarrior] = useState<Warrior | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -31,10 +35,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const setActiveAccount = useCallback((acc: string | null) => {
     setActiveAccountState(acc);
-    if (acc) {
-      localStorage.setItem('robinhood_active_account', acc);
-    } else {
-      localStorage.removeItem('robinhood_active_account');
+    try {
+      if (acc) {
+        localStorage.setItem('robinhood_active_account', acc);
+      } else {
+        localStorage.removeItem('robinhood_active_account');
+      }
+    } catch {
+      // ignore storage access errors
     }
   }, []);
 
