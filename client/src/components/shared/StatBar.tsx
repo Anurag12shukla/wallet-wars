@@ -8,7 +8,7 @@ interface StatBarProps {
   height?: number;
 }
 
-export default function StatBar({ value, max = 100, color = '#9945FF', animated = true, height = 6 }: StatBarProps) {
+export default function StatBar({ value, max = 100, color = '#FFD700', animated = true, height = 6 }: StatBarProps) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100));
 
   return (

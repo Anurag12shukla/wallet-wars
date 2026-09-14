@@ -4,11 +4,11 @@ import { useGame } from '../../context/GameContext';
 import { getArchetypeMeta, getRarityMeta, getStatColor } from '../../utils';
 
 const SCAN_STEPS = [
-  { text: 'SCANNING WALLET...', delay: 0 },
-  { text: 'ANALYZING ACTIVITY...', delay: 1200 },
-  { text: 'IDENTIFYING COMBAT STYLE...', delay: 2400 },
-  { text: 'CALCULATING POWER...', delay: 3600 },
-  { text: 'SUMMONING WARRIOR...', delay: 4800 },
+  { text: 'SCANNING ON-CHAIN HISTORY...', delay: 0 },
+  { text: 'EVALUATING BUYING POWER & LEVERAGE...', delay: 1200 },
+  { text: 'DETERMINING COMBAT STYLE & ARCHETYPE...', delay: 2400 },
+  { text: 'CALCULATING RPG COMBAT ATTRIBUTES...', delay: 3600 },
+  { text: 'AWAKENING GLADIATOR...', delay: 4800 },
 ];
 
 interface WarriorRevealProps {
@@ -22,13 +22,11 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
   const [showStats, setShowStats] = useState(false);
 
   useEffect(() => {
-    // Progress through scan steps
     SCAN_STEPS.forEach((step, i) => {
       setTimeout(() => setScanStep(i), step.delay);
     });
 
-    // Show warrior if ready after scanning
-    const showDelay = isGenerating ? 8000 : 6000;
+    const showDelay = isGenerating ? 7500 : 5500;
     setTimeout(() => {
       if (warrior) {
         setShowWarrior(true);
@@ -37,7 +35,6 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
     }, showDelay);
   }, [warrior, isGenerating]);
 
-  // If warrior appears before timeout, adjust
   useEffect(() => {
     if (warrior && scanStep >= 4) {
       setTimeout(() => {
@@ -51,20 +48,20 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
   const rarityMeta = warrior ? getRarityMeta(warrior.rarity) : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Animated background */}
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-obsidian-deepest">
+      {/* Animated background halo */}
       <div className="absolute inset-0">
         <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+          animate={{ scale: [1, 1.25, 1], opacity: [0.12, 0.25, 0.12] }}
           transition={{ duration: 4, repeat: Infinity }}
           className="absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse at center, #9945FF 0%, transparent 60%)' }}
+          style={{ background: 'radial-gradient(ellipse at center, #F59E0B 0%, transparent 65%)' }}
         />
       </div>
 
-      {/* Scan line */}
+      {/* Gold Scan line */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="scan-line" style={{ background: 'linear-gradient(90deg, transparent 0%, #14F195 50%, transparent 100%)' }} />
+        <div className="scan-line" style={{ background: 'linear-gradient(90deg, transparent 0%, #FFD700 50%, transparent 100%)' }} />
       </div>
 
       <div className="max-w-2xl mx-auto px-4 text-center relative z-10">
@@ -76,25 +73,25 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              {/* Hex scan effect */}
+              {/* Rotating Gold scan rings */}
               <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                className="w-32 h-32 mx-auto mb-8 relative"
+                transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+                className="w-36 h-36 mx-auto mb-8 relative"
               >
-                <div className="absolute inset-0 border-2 border-brand-purple/40 rounded-full" />
-                <div className="absolute inset-2 border-2 border-brand-cyan/30 rounded-full" />
-                <div className="absolute inset-4 border border-brand-purple/20 rounded-full" />
+                <div className="absolute inset-0 border-2 border-gold-500/40 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.3)]" />
+                <div className="absolute inset-2 border-2 border-gold-300/30 rounded-full" />
+                <div className="absolute inset-4 border border-gold-500/20 rounded-full" />
                 <motion.div
                   animate={{ rotate: -720 }}
                   transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                  className="absolute inset-6 border border-brand-cyan/40 rounded-full border-t-brand-cyan"
+                  className="absolute inset-6 border-2 border-gold-400/60 rounded-full border-t-gold-400"
                 />
-                <div className="absolute inset-0 flex items-center justify-center text-4xl">⚡</div>
+                <div className="absolute inset-0 flex items-center justify-center text-4xl">👑</div>
               </motion.div>
 
               {/* Steps */}
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3.5 mb-8">
                 {SCAN_STEPS.map((step, i) => (
                   <motion.div
                     key={i}
@@ -109,18 +106,18 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                     <motion.div
                       animate={i < scanStep ? {} : i === scanStep ? { opacity: [0, 1, 0] } : {}}
                       transition={{ duration: 0.8, repeat: Infinity }}
-                      className={`w-2 h-2 rounded-full ${
-                        i < scanStep ? 'bg-brand-cyan' : i === scanStep ? 'bg-brand-purple' : 'bg-gray-700'
+                      className={`w-2.5 h-2.5 rounded-full ${
+                        i < scanStep ? 'bg-gold-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]' : i === scanStep ? 'bg-gold-300' : 'bg-gray-800'
                       }`}
                     />
                     <span
-                      className={`font-mono text-sm tracking-widest ${
-                        i < scanStep ? 'text-brand-cyan' : i === scanStep ? 'text-white' : 'text-gray-700'
+                      className={`font-mono text-xs sm:text-sm tracking-widest font-bold ${
+                        i < scanStep ? 'text-gold-300' : i === scanStep ? 'text-white' : 'text-gray-600'
                       }`}
                     >
                       {step.text}
                     </span>
-                    {i < scanStep && <span className="text-brand-cyan text-xs">✓</span>}
+                    {i < scanStep && <span className="text-gold-400 text-xs font-bold">✓</span>}
                   </motion.div>
                 ))}
               </div>
@@ -128,21 +125,21 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
               <motion.p
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-gray-500 text-xs font-mono"
+                className="text-gray-400 text-xs font-mono"
               >
-                {isGenerating ? 'Analyzing blockchain data...' : 'Reading on-chain history...'}
+                {isGenerating ? 'Synthesizing on-chain fighter profile...' : 'Reading blockchain records...'}
               </motion.p>
 
               {error && !isGenerating && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 border border-red-500/50 bg-red-500/10 rounded-lg max-w-sm mx-auto"
+                  className="mt-6 p-4 border border-crimson/50 bg-crimson/10 rounded-xl max-w-sm mx-auto"
                 >
-                  <p className="text-red-400 font-mono text-sm mb-4">Error: {error}</p>
+                  <p className="text-crimson font-mono text-sm mb-4">Error: {error}</p>
                   <button 
                     onClick={generateCurrentWarrior}
-                    className="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 font-mono text-xs rounded transition-colors"
+                    className="btn-secondary text-xs py-2 px-4"
                   >
                     RETRY SCAN
                   </button>
@@ -163,10 +160,10 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                 transition={{ duration: 0.6 }}
                 className="mb-8"
               >
-                <p className="font-mono text-sm text-brand-cyan tracking-widest mb-2">
-                  YOUR WARRIOR HAS AWAKENED.
-                </p>
-                <p className="text-gray-500 text-xs font-mono">{warrior.rarity} · {warrior.archetype.replace('_', ' ')}</p>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-300 text-xs font-mono mb-3">
+                  👑 GLADIATOR AWAKENED
+                </div>
+                <p className="text-gray-400 text-xs font-mono">{warrior.rarity} · {warrior.archetype.replace('_', ' ')}</p>
               </motion.div>
 
               {/* Warrior emoji - floating */}
@@ -181,13 +178,12 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                   animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.8, 0.4] }}
                   transition={{ duration: 2, repeat: Infinity }}
                   className="absolute inset-0 blur-3xl rounded-full"
-                  style={{ background: rarityMeta?.color, opacity: 0.3 }}
+                  style={{ background: rarityMeta?.color || '#FFD700', opacity: 0.35 }}
                 />
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                  className="text-9xl relative z-10"
-                  style={{ filter: `drop-shadow(0 0 20px ${meta?.color})` }}
+                  className="text-9xl relative z-10 filter drop-shadow-[0_0_25px_rgba(245,158,11,0.5)]"
                 >
                   {meta?.emoji}
                 </motion.div>
@@ -198,8 +194,7 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5, type: 'spring' }}
-                className="font-display text-4xl md:text-6xl text-white mb-2"
-                style={{ textShadow: `0 0 30px ${meta?.color}80` }}
+                className="font-display text-4xl sm:text-6xl text-white font-extrabold mb-2"
               >
                 {warrior.name}
               </motion.h1>
@@ -208,7 +203,7 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7 }}
-                className="font-display text-lg mb-1"
+                className="font-display text-xl mb-1 font-bold"
                 style={{ color: meta?.color }}
               >
                 {warrior.archetype.replace(/_/g, ' ')}
@@ -218,10 +213,10 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="font-mono text-xs mb-8"
+                className="font-mono text-xs mb-8 font-bold"
                 style={{ color: rarityMeta?.color }}
               >
-                ✦ {warrior.rarity} WARRIOR ✦
+                ✦ {warrior.rarity} TIER GLADIATOR ✦
               </motion.p>
 
               {/* Stats reveal */}
@@ -230,7 +225,7 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="glass-card p-6 mb-8 text-left max-w-md mx-auto"
+                  className="glass-card p-6 mb-8 text-left max-w-md mx-auto border-gold-500/30 shadow-2xl"
                 >
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     {[
@@ -247,11 +242,11 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 * i }}
                       >
-                        <div className="flex justify-between text-xs mb-1">
-                          <span className="text-gray-500 font-mono">{stat.label}</span>
-                          <span className="font-mono" style={{ color: getStatColor(stat.value) }}>{stat.value}</span>
+                        <div className="flex justify-between text-xs mb-1 font-mono font-bold">
+                          <span className="text-gray-400">{stat.label}</span>
+                          <span style={{ color: getStatColor(stat.value) }}>{stat.value}</span>
                         </div>
-                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-2 bg-black/60 rounded-full overflow-hidden border border-gold-500/10">
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${(stat.value / stat.max) * 100}%` }}
@@ -265,12 +260,12 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                   </div>
 
                   {/* Personality traits */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-gold-500/15">
                     {warrior.personality.map(trait => (
                       <span
                         key={trait}
-                        className="text-xs font-mono px-2 py-1 rounded border"
-                        style={{ color: meta?.color, borderColor: meta?.color + '30', background: meta?.color + '10' }}
+                        className="text-[11px] font-mono px-2.5 py-1 rounded-lg border font-bold"
+                        style={{ color: meta?.color, borderColor: meta?.color + '40', background: meta?.color + '15' }}
                       >
                         {trait}
                       </span>
@@ -287,7 +282,7 @@ export default function WarriorReveal({ onComplete }: WarriorRevealProps) {
                 onClick={onComplete}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="btn-primary text-xl px-10 py-4"
+                className="btn-primary text-xl px-12 py-4"
               >
                 ⚔️ ENTER THE ARENA
               </motion.button>

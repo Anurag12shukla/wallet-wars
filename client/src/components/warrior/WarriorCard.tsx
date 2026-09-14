@@ -30,52 +30,52 @@ export default function WarriorCard({ warrior, onClick, compact = false, showSta
       onClick={onClick}
       whileHover={onClick ? { scale: 1.02 } : {}}
       whileTap={onClick ? { scale: 0.98 } : {}}
-      className={`glass-card relative overflow-hidden transition-all duration-300 ${
+      className={`glass-card relative overflow-hidden transition-all duration-300 border-gold-500/30 ${
         onClick ? 'cursor-pointer glass-card-hover' : ''
       } ${compact ? 'p-4' : 'p-6'}`}
       style={{
-        borderColor: glowing ? rarityMeta.color + '60' : undefined,
+        borderColor: glowing ? rarityMeta.color + '80' : undefined,
         boxShadow: glowing ? `0 0 30px ${rarityMeta.glow}` : undefined,
       }}
     >
       {/* Rarity glow top bar */}
       <div
-        className="absolute top-0 left-0 right-0 h-0.5"
+        className="absolute top-0 left-0 right-0 h-1"
         style={{ background: `linear-gradient(90deg, transparent 0%, ${rarityMeta.color} 50%, transparent 100%)` }}
       />
 
-      {/* Archetype background */}
+      {/* Archetype background glow */}
       <div
-        className="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-10 pointer-events-none"
         style={{ background: `radial-gradient(ellipse at center, ${meta.color} 0%, transparent 70%)` }}
       />
 
       {/* Demo badge */}
       {warrior.isDemo && (
-        <div className="absolute top-3 right-3">
-          <span className="text-xs font-mono bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-2 py-0.5 rounded">
+        <div className="absolute top-3 right-3 z-10">
+          <span className="text-[10px] font-mono bg-gold-500/20 text-gold-300 border border-gold-500/40 px-2 py-0.5 rounded-full font-bold">
             DEMO
           </span>
         </div>
       )}
 
-      <div className="relative">
+      <div className="relative z-10">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1.5">
               <span className="text-2xl">{meta.emoji}</span>
               <span
-                className={`text-xs font-display tracking-widest px-2 py-0.5 rounded border`}
-                style={{ color: rarityMeta.color, borderColor: rarityMeta.color + '40', background: rarityMeta.color + '10' }}
+                className="text-[10px] font-display tracking-widest px-2.5 py-0.5 rounded-full border font-bold"
+                style={{ color: rarityMeta.color, borderColor: rarityMeta.color + '50', background: rarityMeta.color + '15' }}
               >
                 {warrior.rarity}
               </span>
             </div>
-            <h3 className={`font-display ${compact ? 'text-lg' : 'text-2xl'} text-white leading-tight`}>
+            <h3 className={`font-display ${compact ? 'text-lg' : 'text-2xl'} text-white font-bold leading-tight`}>
               {warrior.name}
             </h3>
-            <p className="text-xs font-mono text-gray-500 mt-0.5">
+            <p className="text-xs font-mono text-gray-400 mt-0.5">
               {shortenAddress(warrior.walletAddress)}
             </p>
           </div>
@@ -83,41 +83,41 @@ export default function WarriorCard({ warrior, onClick, compact = false, showSta
           {/* Level badge */}
           <div className="text-right">
             <div
-              className="text-xs font-display tracking-wider px-3 py-1 rounded-full"
-              style={{ background: meta.color + '20', color: meta.color, border: `1px solid ${meta.color}40` }}
+              className="text-xs font-display tracking-wider px-3 py-1 rounded-full font-bold shadow-sm"
+              style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#FFD700', border: '1px solid rgba(245, 158, 11, 0.35)' }}
             >
               LVL {warrior.level}
             </div>
-            <p className="text-xs text-gray-500 mt-1 font-display">{warrior.archetype.replace('_', ' ')}</p>
+            <p className="text-[11px] text-gray-400 mt-1 font-display font-semibold">{warrior.archetype.replace('_', ' ')}</p>
           </div>
         </div>
 
         {/* W/L/Streak */}
-        <div className="flex gap-3 mb-4">
-          <div className="flex-1 text-center py-2 rounded-lg bg-green-500/10 border border-green-500/20">
-            <p className="text-lg font-display text-green-400">{warrior.wins}</p>
-            <p className="text-xs text-gray-500">WINS</p>
+        <div className="flex gap-2.5 mb-4">
+          <div className="flex-1 text-center py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+            <p className="text-lg font-display text-emerald-400 font-bold">{warrior.wins}</p>
+            <p className="text-[10px] text-gray-400 font-mono">WINS</p>
           </div>
-          <div className="flex-1 text-center py-2 rounded-lg bg-red-500/10 border border-red-500/20">
-            <p className="text-lg font-display text-red-400">{warrior.losses}</p>
-            <p className="text-xs text-gray-500">LOSSES</p>
+          <div className="flex-1 text-center py-2 rounded-xl bg-crimson/10 border border-crimson/20">
+            <p className="text-lg font-display text-crimson font-bold">{warrior.losses}</p>
+            <p className="text-[10px] text-gray-400 font-mono">LOSSES</p>
           </div>
-          <div className="flex-1 text-center py-2 rounded-lg bg-brand-purple/10 border border-brand-purple/20">
-            <p className="text-lg font-display text-brand-purple">{warrior.winStreak}</p>
-            <p className="text-xs text-gray-500">STREAK</p>
+          <div className="flex-1 text-center py-2 rounded-xl bg-gold-500/15 border border-gold-500/30">
+            <p className="text-lg font-display text-gold-400 font-bold">{warrior.winStreak}</p>
+            <p className="text-[10px] text-gold-400/80 font-mono font-semibold">STREAK</p>
           </div>
         </div>
 
         {/* Stats */}
         {showStats && !compact && (
-          <div className="space-y-2">
+          <div className="space-y-2 bg-black/40 p-3 rounded-xl border border-gold-500/10">
             {stats.map(stat => (
               <div key={stat.label} className="flex items-center gap-2">
-                <span className="text-xs font-mono text-gray-500 w-10 flex-shrink-0">{stat.label}</span>
+                <span className="text-[11px] font-mono text-gray-400 w-10 flex-shrink-0 font-semibold">{stat.label}</span>
                 <div className="flex-1">
                   <StatBar value={stat.value} max={stat.max} color={getStatColor(stat.value)} />
                 </div>
-                <span className="text-xs font-mono text-gray-300 w-8 text-right">{stat.value}</span>
+                <span className="text-[11px] font-mono text-gray-200 w-8 text-right font-bold">{stat.value}</span>
               </div>
             ))}
           </div>
@@ -125,9 +125,10 @@ export default function WarriorCard({ warrior, onClick, compact = false, showSta
 
         {/* Ability */}
         {!compact && (
-          <div className="mt-4 p-3 rounded-lg" style={{ background: meta.color + '10', border: `1px solid ${meta.color}20` }}>
-            <p className="text-xs font-display tracking-wider" style={{ color: meta.color }}>
-              ABILITY: {meta.ability}
+          <div className="mt-3.5 p-2.5 rounded-xl flex items-center justify-between" style={{ background: meta.color + '12', border: `1px solid ${meta.color}25` }}>
+            <span className="text-[11px] font-mono text-gray-400">SIGNATURE ABILITY</span>
+            <p className="text-xs font-display tracking-wider font-bold" style={{ color: meta.color }}>
+              {meta.ability}
             </p>
           </div>
         )}
