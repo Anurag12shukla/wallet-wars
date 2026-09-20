@@ -14,13 +14,13 @@ export interface WalletAnalysisResult {
   riskScore: number; // 0-100
   activityScore: number; // 0-100
   solBalance: number; // legacy alias
-  ethBalance: number; // Robinhood Testnet ETH balance
+  ethBalance: number; // Robinhood Chain ETH balance
   estimatedPortfolioTier: 'micro' | 'small' | 'medium' | 'large' | 'whale';
   calculatedAt: Date;
   isEstimated: boolean;
 }
 
-// Robinhood Network Testnet Provider
+// Robinhood Chain Mainnet Provider
 const provider = new JsonRpcProvider(config.robinhoodRpcUrl);
 
 function scoreFromCount(count: number, lowMark: number, highMark: number): number {
@@ -56,7 +56,7 @@ export async function analyzeWallet(walletAddress: string): Promise<WalletAnalys
 
   if (isEVM) {
     try {
-      // Query live Robinhood Testnet (Chain ID 46630)
+      // Query live Robinhood Chain Mainnet (Chain ID 4663)
       const [rawBalance, txCount] = await Promise.all([
         provider.getBalance(normalized).catch(() => 0n),
         provider.getTransactionCount(normalized).catch(() => 0),
@@ -67,7 +67,7 @@ export async function analyzeWallet(walletAddress: string): Promise<WalletAnalys
       result.solBalance = eth; // alias for backwards compatibility
       result.transactionCount = Math.max(1, txCount);
 
-      // Determine portfolio tier on Robinhood Testnet
+      // Determine portfolio tier on Robinhood Chain Mainnet
       if (eth >= 50 || txCount > 250) {
         result.estimatedPortfolioTier = 'whale';
       } else if (eth >= 10 || txCount > 100) {

@@ -25,9 +25,7 @@ export const createBattleController = async (req: Request, res: Response, next: 
     const p1Normalized = playerOneWallet.toLowerCase();
     const p2Normalized = playerTwoWallet.toLowerCase();
 
-    if (p1Normalized === p2Normalized) {
-      return res.status(400).json(formatError('SAME_WALLET', 'Cannot battle yourself.'));
-    }
+    // Removed restriction to allow battling your own wallet
 
     // Load or generate warriors
     const [p1Warrior, p2Warrior] = await Promise.all([
@@ -45,7 +43,7 @@ export const createBattleController = async (req: Request, res: Response, next: 
       playerOneWallet: p1Normalized,
       playerTwoWallet: p2Normalized,
       playerOne: {
-        hp: p1Warrior.hp,
+        hp: 100, // Equalized health for all combatants
         attack: p1Warrior.attack,
         defense: p1Warrior.defense,
         speed: p1Warrior.speed,
@@ -56,7 +54,7 @@ export const createBattleController = async (req: Request, res: Response, next: 
         name: p1Warrior.name,
       },
       playerTwo: {
-        hp: p2Warrior.hp,
+        hp: 100, // Equalized health for all combatants
         attack: p2Warrior.attack,
         defense: p2Warrior.defense,
         speed: p2Warrior.speed,
@@ -118,6 +116,7 @@ export const createBattleController = async (req: Request, res: Response, next: 
         ...(p1Won ? { winStreak: 1 } : {}),
       },
       $set: {
+        hp: 100,
         level: calculateLevel(p1NewXp),
         ...(!p1Won ? { winStreak: 0 } : {}),
       },
@@ -132,6 +131,7 @@ export const createBattleController = async (req: Request, res: Response, next: 
         ...(p2Won ? { winStreak: 1 } : {}),
       },
       $set: {
+        hp: 100,
         level: calculateLevel(p2NewXp),
         ...(!p2Won ? { winStreak: 0 } : {}),
       },
@@ -162,6 +162,7 @@ export const createBattleController = async (req: Request, res: Response, next: 
       battleId,
       winner: winnerWallet,
       loser: loserWallet,
+      winnerPlayer: battleResult.winner, // 'playerOne' | 'playerTwo'
       rounds: battleResult.rounds,
       battleLog: battleResult.battleLog,
       playerOneScore: battleResult.playerOneScore,

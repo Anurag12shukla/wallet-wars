@@ -1,21 +1,25 @@
 /**
- * Robinhood Network (Chain ID 46630) Configuration
+ * Robinhood Chain (Chain ID 4663) Configuration - Mainnet
  */
 
-export const ROBINHOOD_TESTNET = {
-  chainId: 46630,
-  chainIdHex: '0xb626',
-  name: 'Robinhood Testnet',
-  rpcUrl: 'https://rpc.testnet.chain.robinhood.com',
+export const ROBINHOOD_MAINNET = {
+  chainId: 4663,
+  chainIdHex: '0x1237',
+  name: 'Robinhood Chain',
+  rpcUrl: 'https://rpc.mainnet.chain.robinhood.com',
   currency: {
     name: 'Ether',
     symbol: 'ETH',
     decimals: 18,
   },
-  explorerUrl: 'https://explorer.testnet.chain.robinhood.com',
+  explorerUrl: 'https://robinhoodchain.blockscout.com',
 };
 
-// Deployed Arena Contract Address on Robinhood Testnet
+// Aliases for compatibility
+export const ROBINHOOD_CHAIN = ROBINHOOD_MAINNET;
+export const ROBINHOOD_TESTNET = ROBINHOOD_MAINNET; // Backward compatibility alias
+
+// Deployed Arena Contract Address on Robinhood Chain Mainnet
 export const ARENA_CONTRACT_ADDRESS = '0x4663000000000000000000000000000000004663';
 
 /**
@@ -31,7 +35,7 @@ export async function switchOrAddRobinhoodNetwork(injectedProvider?: any): Promi
     // Attempt network switch
     await eth.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: ROBINHOOD_TESTNET.chainIdHex }],
+      params: [{ chainId: ROBINHOOD_MAINNET.chainIdHex }],
     });
     return true;
   } catch (switchError: any) {
@@ -42,31 +46,31 @@ export async function switchOrAddRobinhoodNetwork(injectedProvider?: any): Promi
           method: 'wallet_addEthereumChain',
           params: [
             {
-              chainId: ROBINHOOD_TESTNET.chainIdHex,
-              chainName: ROBINHOOD_TESTNET.name,
-              rpcUrls: [ROBINHOOD_TESTNET.rpcUrl],
-              nativeCurrency: ROBINHOOD_TESTNET.currency,
-              blockExplorerUrls: [ROBINHOOD_TESTNET.explorerUrl],
+              chainId: ROBINHOOD_MAINNET.chainIdHex,
+              chainName: ROBINHOOD_MAINNET.name,
+              rpcUrls: [ROBINHOOD_MAINNET.rpcUrl],
+              nativeCurrency: ROBINHOOD_MAINNET.currency,
+              blockExplorerUrls: [ROBINHOOD_MAINNET.explorerUrl],
             },
           ],
         });
         return true;
       } catch (addError) {
-        console.error('Failed to add Robinhood Testnet to wallet:', addError);
+        console.error('Failed to add Robinhood Chain to wallet:', addError);
         throw addError;
       }
     }
-    console.error('Failed to switch to Robinhood Testnet:', switchError);
+    console.error('Failed to switch to Robinhood Chain:', switchError);
     throw switchError;
   }
 }
 
 export function getExplorerAddressUrl(address: string): string {
-  if (!address) return ROBINHOOD_TESTNET.explorerUrl;
-  return `${ROBINHOOD_TESTNET.explorerUrl}/address/${address}`;
+  if (!address) return ROBINHOOD_MAINNET.explorerUrl;
+  return `${ROBINHOOD_MAINNET.explorerUrl}/address/${address}`;
 }
 
 export function getExplorerTxUrl(txHash: string): string {
-  if (!txHash) return ROBINHOOD_TESTNET.explorerUrl;
-  return `${ROBINHOOD_TESTNET.explorerUrl}/tx/${txHash}`;
+  if (!txHash) return ROBINHOOD_MAINNET.explorerUrl;
+  return `${ROBINHOOD_MAINNET.explorerUrl}/tx/${txHash}`;
 }

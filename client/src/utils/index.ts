@@ -246,20 +246,3 @@ export function formatWinRate(wins: number, losses: number): string {
   return `${Math.round((wins / total) * 100)}%`;
 }
 
-// Demo warriors for demo mode
-export const DEMO_WARRIORS = {
-  playerOne: 'demo_options_001',
-  playerTwo: 'demo_whale_001',
-  options: [
-    { wallet: 'demo_options_001', name: '0DTE GAMMA TITAN', archetype: 'OPTIONS_DEGEN', emoji: '📈' },
-    { wallet: 'demo_whale_001', name: 'THE ROBINHOOD LEVIATHAN', archetype: 'ROBINHOOD_WHALE', emoji: '🐋' },
-    { wallet: 'demo_diamond_001', name: 'DIAMOND WRAITH', archetype: 'DIAMOND_HANDS', emoji: '💎' },
-    { wallet: 'demo_doge_001', name: 'DOGE MOON LORD', archetype: 'DOGE_KING', emoji: '🐕' },
-    { wallet: 'demo_bogle_001', name: 'BOGLE COMPOUND SAGE', archetype: 'INDEX_MAXI', emoji: '📊' },
-    { wallet: 'demo_margin_001', name: 'THE MARGIN REAPER', archetype: 'MARGIN_SURVIVOR', emoji: '🩸' },
-    { wallet: 'demo_gold_001', name: 'ROBINHOOD GOLD TITAN', archetype: 'ROBINHOOD_GOLD', emoji: '👑' },
-    { wallet: 'demo_day_001', name: '9:30 AM CANDLE SNIPER', archetype: 'DAY_TRADER', emoji: '⚡' },
-    { wallet: 'demo_paper_001', name: 'PAPER DASH GHOST', archetype: 'PAPER_HANDS', emoji: '📄' },
-    { wallet: 'demo_quant_001', name: 'DELTA QUANT MATRIX', archetype: 'ALGO_QUANT', emoji: '🤖' },
-  ],
-};

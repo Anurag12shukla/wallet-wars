@@ -74,7 +74,7 @@ contract WarriorArena {
     }
 
     /**
-     * @notice Register or update a warrior's on-chain presence on Robinhood Testnet.
+     * @notice Register or update a warrior's on-chain presence on Robinhood Chain.
      */
     function registerWarrior(
         string memory name,

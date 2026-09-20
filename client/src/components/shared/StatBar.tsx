@@ -8,30 +8,22 @@ interface StatBarProps {
   height?: number;
 }
 
-export default function StatBar({ value, max = 100, color = '#FFD700', animated = true, height = 6 }: StatBarProps) {
+export default function StatBar({ value, max = 100, color = '#3B82F6', animated = true, height = 6 }: StatBarProps) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100));
 
   return (
     <div
-      className="relative rounded-full overflow-hidden"
-      style={{ height: `${height}px`, background: 'rgba(255,255,255,0.06)' }}
+      className="relative rounded-full overflow-hidden bg-slate-100"
+      style={{ height: `${height}px` }}
     >
       <div
-        className="h-full rounded-full relative overflow-hidden"
+        className="h-full rounded-full relative"
         style={{
           width: `${pct}%`,
-          background: `linear-gradient(90deg, ${color}aa, ${color})`,
-          transition: animated ? 'width 1s ease' : undefined,
+          backgroundColor: color,
+          transition: animated ? 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)' : undefined,
         }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
-            animation: 'shimmer-bar 2s linear infinite',
-          }}
-        />
-      </div>
+      />
     </div>
   );
 }

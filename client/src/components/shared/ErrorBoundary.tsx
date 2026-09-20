@@ -45,19 +45,19 @@ export default class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-brand-darker flex items-center justify-center p-4">
-          <div className="max-w-md w-full glass-card border border-brand-gold/30 rounded-2xl p-8 text-center shadow-[0_0_50px_rgba(255,215,0,0.15)]">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+        <div className="min-h-screen bg-[#F7F8F5] flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white border border-stone-200 rounded-3xl p-8 text-center shadow-soft-sm">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-pastel-cream-100 border border-pastel-cream-200 flex items-center justify-center text-3xl">
               ⚔️
             </div>
-            <h1 className="font-display text-2xl font-bold gradient-gold-text mb-2">
+            <h1 className="font-display text-xl font-bold text-slate-900 mb-2">
               ARENA RECOVERY
             </h1>
-            <p className="text-gray-400 text-sm mb-6">
+            <p className="text-slate-600 text-sm mb-6">
               The arena encountered an unexpected anomaly while initializing. Reconnect to resume combat.
             </p>
             {this.state.error && (
-              <p className="text-xs font-mono text-brand-crimson bg-black/50 p-3 rounded-lg border border-brand-gold/20 mb-6 text-left break-all">
+              <p className="text-xs font-mono text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200 mb-6 text-left break-all">
                 {this.state.error.message || String(this.state.error)}
               </p>
             )}

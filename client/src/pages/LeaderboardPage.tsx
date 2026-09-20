@@ -18,61 +18,57 @@ export default function LeaderboardPage() {
   const [activeCategory, setActiveCategory] = useState('overall');
   const { entries, loading, error } = useLeaderboard(activeCategory, 50);
 
-  const RANK_STYLES: Record<number, string> = {
-    1: 'text-gold-400 text-glow-gold font-extrabold',
-    2: 'text-chrome font-bold',
-    3: 'text-amber-500 font-bold',
-  };
-
   return (
-    <div className="min-h-screen py-12 bg-obsidian-deepest relative">
-      {/* Ambient Halo Glow */}
-      <div className="absolute top-16 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gold-500/10 rounded-full blur-[140px] pointer-events-none" />
-
+    <div className="min-h-screen py-12 bg-[#F7F8F5] relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-300 text-xs font-mono mb-4">
+        <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full border border-stone-200 bg-white text-slate-700 text-xs font-mono font-semibold mb-3 shadow-soft-xs">
             👑 HALL OF CHAMPIONS
           </div>
-          <h1 className="text-section text-white mb-2">GLOBAL <span className="gradient-gold">LEADERBOARD</span></h1>
-          <p className="text-gray-400 text-sm sm:text-base">The elite gladiators commanding the arena. Who rules the leaderboard?</p>
+          <h1 className="text-3xl sm:text-5xl font-display font-extrabold text-slate-900 tracking-tight mb-2">
+            Global Leaderboard
+          </h1>
+          <p className="text-slate-600 text-sm sm:text-base">The elite gladiators commanding the arena. Who rules the leaderboard?</p>
         </motion.div>
 
         {/* Category tabs */}
         <div className="flex flex-wrap gap-2 justify-center mb-10">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2.5 rounded-xl font-display text-xs tracking-wider transition-all border font-bold ${
-                activeCategory === cat.id
-                  ? 'bg-gold-500/20 border-gold-400 text-gold-300 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
-                  : 'border-gold-500/20 bg-obsidian-card text-gray-400 hover:border-gold-500/40 hover:text-white'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {CATEGORIES.map(cat => {
+            const isActive = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-4 py-2 rounded-xl font-display text-xs tracking-wider transition-all border font-semibold ${
+                  isActive
+                    ? 'bg-slate-900 border-slate-900 text-white shadow-soft-xs'
+                    : 'border-stone-200 bg-white text-slate-600 hover:border-stone-300 hover:text-slate-900 shadow-soft-xs'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Leaderboard */}
         {loading ? (
           <div className="text-center py-20">
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-              className="w-12 h-12 border-3 border-gold-400 border-t-transparent rounded-full mx-auto mb-4" />
-            <p className="font-display text-gold-400 animate-pulse font-bold">LOADING ARENA RANKS...</p>
+              className="w-10 h-10 border-3 border-amber-500 border-t-transparent rounded-full mx-auto mb-4" />
+            <p className="font-display text-slate-700 font-bold text-sm">LOADING ARENA RANKS...</p>
           </div>
         ) : error ? (
-          <div className="text-center py-20 text-crimson font-mono">{error}</div>
+          <div className="text-center py-20 text-rose-600 font-mono text-sm">{error}</div>
         ) : entries.length === 0 ? (
-          <div className="text-center py-20 glass-card p-12 border-gold-500/20">
-            <p className="text-5xl mb-4">🏟️</p>
-            <p className="text-white font-display text-2xl font-bold mb-2">ARENA IS EMPTY</p>
-            <p className="text-gray-400 text-sm mb-6">Be the first gladiator to claim the throne.</p>
+          <div className="text-center py-16 bg-white border border-stone-200 rounded-3xl p-10 shadow-soft-sm">
+            <p className="text-4xl mb-3">🏟️</p>
+            <p className="text-slate-900 font-display text-xl font-bold mb-2">ARENA IS EMPTY</p>
+            <p className="text-slate-600 text-sm mb-6">Be the first gladiator to claim the throne.</p>
             <Link to="/arena" className="btn-primary">⚔️ ENTER ARENA</Link>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {entries.map((entry, i) => {
               const meta = getArchetypeMeta(entry.archetype);
               const isTop3 = entry.rank <= 3;
@@ -80,64 +76,64 @@ export default function LeaderboardPage() {
               return (
                 <motion.div
                   key={entry.walletAddress}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -15 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: Math.min(i * 0.05, 0.4) }}
-                  className={`glass-card p-4 sm:p-5 flex items-center gap-4 glass-card-hover border-gold-500/20 ${
-                    isTop3 ? 'border-gold-500/40 bg-obsidian-card/95 shadow-[0_4px_20px_rgba(0,0,0,0.5)]' : ''
+                  transition={{ delay: Math.min(i * 0.04, 0.3) }}
+                  className={`p-4 sm:p-4.5 rounded-2xl border flex items-center gap-4 transition-all shadow-soft-xs ${
+                    entry.rank === 1
+                      ? 'bg-pastel-cream-50/70 border-pastel-cream-200'
+                      : isTop3
+                      ? 'bg-white border-stone-200 hover:border-stone-300'
+                      : 'bg-white border-stone-200 hover:border-stone-300'
                   }`}
-                  style={isTop3 ? { borderColor: ['#FFD700', '#E2E8F0', '#F59E0B'][entry.rank - 1] + '60' } : {}}
                 >
                   {/* Rank */}
-                  <div className={`text-2xl font-display w-10 text-center flex-shrink-0 ${RANK_STYLES[entry.rank] || 'text-gray-500'}`}>
-                    {entry.rank === 1 ? '👑' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `#${entry.rank}`}
+                  <div className="text-xl font-display w-8 text-center flex-shrink-0 font-bold text-slate-700">
+                    {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `#${entry.rank}`}
                   </div>
 
                   {/* Emoji */}
-                  <span className="text-3xl flex-shrink-0 filter drop-shadow-[0_0_8px_rgba(245,158,11,0.2)]">{meta.emoji}</span>
+                  <span className="text-2xl flex-shrink-0">{meta.emoji}</span>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <Link
                         to={`/warrior/${entry.walletAddress}`}
-                        className="font-display text-base sm:text-lg text-white hover:text-gold-300 font-bold transition-colors truncate"
+                        className="font-display text-sm sm:text-base text-slate-900 hover:text-amber-600 font-bold transition-colors truncate"
                       >
                         {entry.name}
                       </Link>
-                      {entry.isDemo && (
-                        <span className="text-[10px] font-mono text-gold-400 bg-gold-500/15 border border-gold-500/30 px-2 py-0.5 rounded-full font-bold flex-shrink-0">DEMO</span>
-                      )}
                     </div>
-                    <p className="text-xs text-gray-400 font-mono mt-0.5">
-                      <span className="text-gold-400/90">{entry.archetype.replace(/_/g, ' ')}</span> · LVL {entry.level} · {shortenAddress(entry.walletAddress)}
+                    <p className="text-xs text-slate-500 font-mono mt-0.5">
+                      <span className="text-slate-700 font-semibold">{entry.archetype.replace(/_/g, ' ')}</span> · LVL {entry.level} · {shortenAddress(entry.walletAddress)}
                     </p>
                   </div>
 
                   {/* Stats */}
                   <div className="hidden md:flex items-center gap-6 text-right">
                     <div>
-                      <p className="font-display text-emerald-400 font-bold text-base">{entry.wins}</p>
-                      <p className="text-[10px] text-gray-400 font-mono">WINS</p>
+                      <p className="font-display text-emerald-700 font-bold text-sm">{entry.wins}</p>
+                      <p className="text-[10px] text-slate-500 font-mono font-medium">WINS</p>
                     </div>
                     <div>
-                      <p className="font-display text-crimson font-bold text-base">{entry.losses}</p>
-                      <p className="text-[10px] text-gray-400 font-mono">LOSSES</p>
+                      <p className="font-display text-rose-700 font-bold text-sm">{entry.losses}</p>
+                      <p className="text-[10px] text-slate-500 font-mono font-medium">LOSSES</p>
                     </div>
                     <div>
-                      <p className="font-display text-gold-400 font-bold text-base">{entry.winRate}%</p>
-                      <p className="text-[10px] text-gray-400 font-mono">WIN RATE</p>
+                      <p className="font-display text-slate-900 font-bold text-sm">{entry.winRate}%</p>
+                      <p className="text-[10px] text-slate-500 font-mono font-medium">WIN RATE</p>
                     </div>
                     <div>
-                      <p className="font-display text-white font-bold text-base">{entry.xp.toLocaleString()}</p>
-                      <p className="text-[10px] text-gray-400 font-mono">TOTAL XP</p>
+                      <p className="font-display text-slate-700 font-bold text-sm">{entry.xp.toLocaleString()}</p>
+                      <p className="text-[10px] text-slate-500 font-mono font-medium">TOTAL XP</p>
                     </div>
                   </div>
 
                   {/* Mobile stats */}
                   <div className="md:hidden text-right">
-                    <p className="font-display text-emerald-400 font-bold">{entry.wins}W</p>
-                    <p className="text-xs text-gray-400 font-mono">{entry.winRate}% WR</p>
+                    <p className="font-display text-emerald-700 font-bold text-xs">{entry.wins}W</p>
+                    <p className="text-[11px] text-slate-500 font-mono">{entry.winRate}% WR</p>
                   </div>
                 </motion.div>
               );

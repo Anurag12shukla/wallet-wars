@@ -28,96 +28,77 @@ export default function WarriorCard({ warrior, onClick, compact = false, showSta
   return (
     <motion.div
       onClick={onClick}
-      whileHover={onClick ? { scale: 1.02 } : {}}
-      whileTap={onClick ? { scale: 0.98 } : {}}
-      className={`glass-card relative overflow-hidden transition-all duration-300 border-gold-500/30 ${
-        onClick ? 'cursor-pointer glass-card-hover' : ''
+      whileHover={onClick ? { scale: 1.015, y: -2 } : {}}
+      whileTap={onClick ? { scale: 0.985 } : {}}
+      className={`glass-card relative overflow-hidden transition-all duration-200 border-stone-200 bg-white shadow-soft-sm ${
+        onClick ? 'cursor-pointer hover:border-stone-300 hover:shadow-soft-md' : ''
       } ${compact ? 'p-4' : 'p-6'}`}
       style={{
-        borderColor: glowing ? rarityMeta.color + '80' : undefined,
-        boxShadow: glowing ? `0 0 30px ${rarityMeta.glow}` : undefined,
+        borderColor: glowing ? rarityMeta.color + '70' : undefined,
       }}
     >
-      {/* Rarity glow top bar */}
+      {/* Top subtle rarity accent bar */}
       <div
         className="absolute top-0 left-0 right-0 h-1"
-        style={{ background: `linear-gradient(90deg, transparent 0%, ${rarityMeta.color} 50%, transparent 100%)` }}
+        style={{ background: rarityMeta.color }}
       />
-
-      {/* Archetype background glow */}
-      <div
-        className="absolute inset-0 opacity-10 pointer-events-none"
-        style={{ background: `radial-gradient(ellipse at center, ${meta.color} 0%, transparent 70%)` }}
-      />
-
-      {/* Demo badge */}
-      {warrior.isDemo && (
-        <div className="absolute top-3 right-3 z-10">
-          <span className="text-[10px] font-mono bg-gold-500/20 text-gold-300 border border-gold-500/40 px-2 py-0.5 rounded-full font-bold">
-            DEMO
-          </span>
-        </div>
-      )}
 
       <div className="relative z-10">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-2xl">{meta.emoji}</span>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl leading-none">{meta.emoji}</span>
               <span
-                className="text-[10px] font-display tracking-widest px-2.5 py-0.5 rounded-full border font-bold"
-                style={{ color: rarityMeta.color, borderColor: rarityMeta.color + '50', background: rarityMeta.color + '15' }}
+                className="text-[10px] font-display font-bold tracking-wider px-2.5 py-0.5 rounded-full border"
+                style={{ color: rarityMeta.color, borderColor: rarityMeta.color + '40', background: rarityMeta.color + '12' }}
               >
                 {warrior.rarity}
               </span>
             </div>
-            <h3 className={`font-display ${compact ? 'text-lg' : 'text-2xl'} text-white font-bold leading-tight`}>
+            <h3 className={`font-display ${compact ? 'text-base' : 'text-xl sm:text-2xl'} text-slate-900 font-extrabold leading-tight tracking-tight`}>
               {warrior.name}
             </h3>
-            <p className="text-xs font-mono text-gray-400 mt-0.5">
+            <p className="text-xs font-mono text-slate-500 mt-0.5">
               {shortenAddress(warrior.walletAddress)}
             </p>
           </div>
 
           {/* Level badge */}
           <div className="text-right">
-            <div
-              className="text-xs font-display tracking-wider px-3 py-1 rounded-full font-bold shadow-sm"
-              style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#FFD700', border: '1px solid rgba(245, 158, 11, 0.35)' }}
-            >
+            <div className="text-xs font-mono font-bold tracking-wide px-3 py-1 rounded-full bg-slate-100 text-slate-800 border border-stone-200">
               LVL {warrior.level}
             </div>
-            <p className="text-[11px] text-gray-400 mt-1 font-display font-semibold">{warrior.archetype.replace('_', ' ')}</p>
+            <p className="text-[11px] text-slate-500 mt-1 font-display font-semibold">{warrior.archetype.replace(/_/g, ' ')}</p>
           </div>
         </div>
 
         {/* W/L/Streak */}
         <div className="flex gap-2.5 mb-4">
-          <div className="flex-1 text-center py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-            <p className="text-lg font-display text-emerald-400 font-bold">{warrior.wins}</p>
-            <p className="text-[10px] text-gray-400 font-mono">WINS</p>
+          <div className="flex-1 text-center py-2.5 rounded-xl bg-pastel-sage-50 border border-pastel-sage-200">
+            <p className="text-lg font-display text-pastel-sage-700 font-extrabold">{warrior.wins}</p>
+            <p className="text-[10px] text-pastel-sage-600 font-mono font-semibold">WINS</p>
           </div>
-          <div className="flex-1 text-center py-2 rounded-xl bg-crimson/10 border border-crimson/20">
-            <p className="text-lg font-display text-crimson font-bold">{warrior.losses}</p>
-            <p className="text-[10px] text-gray-400 font-mono">LOSSES</p>
+          <div className="flex-1 text-center py-2.5 rounded-xl bg-pastel-pink-50 border border-pastel-pink-200">
+            <p className="text-lg font-display text-pastel-pink-700 font-extrabold">{warrior.losses}</p>
+            <p className="text-[10px] text-pastel-pink-600 font-mono font-semibold">LOSSES</p>
           </div>
-          <div className="flex-1 text-center py-2 rounded-xl bg-gold-500/15 border border-gold-500/30">
-            <p className="text-lg font-display text-gold-400 font-bold">{warrior.winStreak}</p>
-            <p className="text-[10px] text-gold-400/80 font-mono font-semibold">STREAK</p>
+          <div className="flex-1 text-center py-2.5 rounded-xl bg-pastel-cream-50 border border-pastel-cream-200">
+            <p className="text-lg font-display text-amber-700 font-extrabold">{warrior.winStreak}</p>
+            <p className="text-[10px] text-amber-600 font-mono font-semibold">STREAK</p>
           </div>
         </div>
 
         {/* Stats */}
         {showStats && !compact && (
-          <div className="space-y-2 bg-black/40 p-3 rounded-xl border border-gold-500/10">
+          <div className="space-y-2 bg-slate-50/70 p-3.5 rounded-xl border border-stone-200/80">
             {stats.map(stat => (
               <div key={stat.label} className="flex items-center gap-2">
-                <span className="text-[11px] font-mono text-gray-400 w-10 flex-shrink-0 font-semibold">{stat.label}</span>
+                <span className="text-[11px] font-mono text-slate-500 w-10 flex-shrink-0 font-semibold">{stat.label}</span>
                 <div className="flex-1">
                   <StatBar value={stat.value} max={stat.max} color={getStatColor(stat.value)} />
                 </div>
-                <span className="text-[11px] font-mono text-gray-200 w-8 text-right font-bold">{stat.value}</span>
+                <span className="text-[11px] font-mono text-slate-800 w-8 text-right font-bold">{stat.value}</span>
               </div>
             ))}
           </div>
@@ -125,9 +106,9 @@ export default function WarriorCard({ warrior, onClick, compact = false, showSta
 
         {/* Ability */}
         {!compact && (
-          <div className="mt-3.5 p-2.5 rounded-xl flex items-center justify-between" style={{ background: meta.color + '12', border: `1px solid ${meta.color}25` }}>
-            <span className="text-[11px] font-mono text-gray-400">SIGNATURE ABILITY</span>
-            <p className="text-xs font-display tracking-wider font-bold" style={{ color: meta.color }}>
+          <div className="mt-3.5 p-3 rounded-xl flex items-center justify-between bg-pastel-lavender-50 border border-pastel-lavender-200">
+            <span className="text-[10px] font-mono text-pastel-lavender-700 font-semibold uppercase tracking-wider">SIGNATURE ABILITY</span>
+            <p className="text-xs font-display tracking-wider font-bold text-pastel-lavender-700">
               {meta.ability}
             </p>
           </div>

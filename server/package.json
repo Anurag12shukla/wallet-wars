@@ -1,7 +1,7 @@
 {
   "name": "wallet-wars-server",
   "version": "1.0.0",
-  "description": "Wallet Wars Backend - Express + MongoDB + Robinhood Network (Chain ID 46630)",
+  "description": "Wallet Wars Backend - Express + MongoDB + Robinhood Chain (Chain ID 4663)",
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec ts-node src/index.ts",

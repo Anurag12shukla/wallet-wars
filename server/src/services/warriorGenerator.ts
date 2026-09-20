@@ -209,12 +209,9 @@ export function determineRarity(analysis: WalletAnalysisResult): IWarrior['rarit
 export function generateStats(analysis: WalletAnalysisResult, archetype: string, walletAddress: string) {
   const def = ARCHETYPES[archetype] || ARCHETYPES['DEGEN'];
 
+  // Standardize HP to 100 for all warriors so health is equalized
+  const hp = 100;
   const BASE = 50;
-
-  const hp = clamp(
-    BASE + def.statModifiers.hp + Math.round(analysis.holdingScore * 0.3) + deterministicVariance(walletAddress, 'hp'),
-    20, 200
-  );
 
   const attack = clamp(
     BASE + def.statModifiers.attack + Math.round(analysis.tradingActivity * 0.3) + deterministicVariance(walletAddress, 'attack'),

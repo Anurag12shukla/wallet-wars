@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { BrowserProvider, JsonRpcSigner, formatEther } from 'ethers';
-import { ROBINHOOD_TESTNET, switchOrAddRobinhoodNetwork } from '../config/robinhood';
+import { ROBINHOOD_MAINNET, switchOrAddRobinhoodNetwork } from '../config/robinhood';
 
 interface EVMWalletContextType {
   account: string | null;
@@ -27,7 +27,7 @@ export function EVMWalletProvider({ children }: { children: React.ReactNode }) {
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isCorrectNetwork = chainId === ROBINHOOD_TESTNET.chainId;
+  const isCorrectNetwork = chainId === ROBINHOOD_MAINNET.chainId;
 
   const refreshBalance = useCallback(async (userAccount: string, currentProvider: BrowserProvider) => {
     try {
@@ -139,10 +139,10 @@ export function EVMWalletProvider({ children }: { children: React.ReactNode }) {
       await ethereum.request({ method: 'eth_requestAccounts' });
       await initConnection(ethereum);
 
-      // Prompt switch to Robinhood Testnet if not on it
+      // Prompt switch to Robinhood Chain Mainnet if not on it
       const bp = new BrowserProvider(ethereum);
       const network = await bp.getNetwork();
-      if (Number(network.chainId) !== ROBINHOOD_TESTNET.chainId) {
+      if (Number(network.chainId) !== ROBINHOOD_MAINNET.chainId) {
         try {
           await switchOrAddRobinhoodNetwork(ethereum);
           await initConnection(ethereum);

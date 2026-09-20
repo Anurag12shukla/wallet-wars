@@ -55,73 +55,73 @@ export default function RobinhoodWalletButton() {
     return (
       <button
         onClick={switchToRobinhood}
-        className="px-3.5 py-1.5 rounded-xl bg-crimson text-white font-display font-bold text-xs tracking-wider hover:bg-crimson-dark transition-all shadow-[0_0_15px_rgba(239,68,68,0.4)] flex items-center gap-2 animate-pulse"
+        className="px-4 py-2 rounded-xl bg-pastel-pink-100 border border-pastel-pink-200 text-pastel-pink-700 font-display font-bold text-xs tracking-wider hover:bg-pastel-pink-200 transition-all flex items-center gap-2 whitespace-nowrap flex-shrink-0"
       >
-        <span className="w-2 h-2 rounded-full bg-white" />
-        <span>SWITCH TO TESTNET (46630)</span>
+        <span className="w-2 h-2 rounded-full bg-pastel-pink-600" />
+        <span>SWITCH TO MAINNET (4663)</span>
       </button>
     );
   }
 
-  // Connected state on Robinhood Testnet
+  // Connected state on Robinhood Chain Mainnet
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setDropdownOpen(prev => !prev)}
-        className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-gold-500/40 bg-obsidian-card hover:border-gold-400 hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all text-xs"
+        className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 hover:border-stone-300 shadow-soft-xs transition-all text-xs whitespace-nowrap flex-shrink-0"
       >
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-gold-400 animate-pulse" />
-          <span className="hidden sm:inline-block font-mono text-[11px] text-gold-400 font-semibold">
-            Robinhood Testnet
+          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          <span className="hidden sm:inline-block font-mono text-[11px] text-slate-600 font-semibold">
+            Robinhood Chain
           </span>
         </div>
 
         {balance !== null && (
-          <span className="hidden md:inline-block px-1.5 py-0.5 rounded bg-black/60 text-[11px] font-mono text-gold-300 border border-gold-500/20">
+          <span className="hidden md:inline-block px-1.5 py-0.5 rounded bg-stone-100 text-[11px] font-mono text-slate-700 border border-stone-200 font-medium">
             {balance} ETH
           </span>
         )}
 
-        <span className="font-mono text-white text-xs font-semibold">
+        <span className="font-mono text-slate-900 text-xs font-semibold">
           {shortenAddress(account)}
         </span>
 
-        <span className="text-[10px] text-gold-400">▼</span>
+        <span className="text-[10px] text-slate-400">▼</span>
       </button>
 
       {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-60 rounded-2xl border border-gold-500/30 bg-obsidian-card p-2 shadow-2xl z-50 backdrop-blur-xl">
-          <div className="px-3 py-2.5 border-b border-gold-500/20 mb-1">
-            <p className="text-[10px] font-mono text-gold-400 uppercase tracking-wider">Connected Account</p>
-            <p className="text-xs font-mono text-white break-all mt-0.5">{account}</p>
+        <div className="absolute right-0 mt-2 w-64 rounded-2xl border border-stone-200 bg-white p-2 shadow-soft-md z-50">
+          <div className="px-3 py-2.5 border-b border-stone-100 mb-1">
+            <p className="text-[10px] font-mono text-slate-500 uppercase tracking-wider font-semibold">Connected Account</p>
+            <p className="text-xs font-mono text-slate-900 break-all mt-0.5 font-medium">{account}</p>
           </div>
 
           <button
             onClick={handleCopy}
-            className="w-full text-left px-3 py-2 text-xs font-display tracking-wider text-gray-300 hover:text-white hover:bg-gold-500/10 rounded-lg transition-colors flex items-center justify-between"
+            className="w-full text-left px-3 py-2 text-xs font-display font-medium tracking-wide text-slate-700 hover:text-slate-900 hover:bg-stone-50 rounded-lg transition-colors flex items-center justify-between"
           >
             <span>📋 Copy Address</span>
-            {copied && <span className="text-gold-400 text-[10px]">Copied!</span>}
+            {copied && <span className="text-emerald-600 text-[10px] font-semibold">Copied!</span>}
           </button>
 
           <a
             href={getExplorerAddressUrl(account)}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full text-left px-3 py-2 text-xs font-display tracking-wider text-gray-300 hover:text-white hover:bg-gold-500/10 rounded-lg transition-colors flex items-center gap-1.5"
+            className="w-full text-left px-3 py-2 text-xs font-display font-medium tracking-wide text-slate-700 hover:text-slate-900 hover:bg-stone-50 rounded-lg transition-colors flex items-center gap-1.5"
           >
             <span>🔍 View on Explorer</span>
           </a>
 
-          <div className="border-t border-gold-500/20 my-1" />
+          <div className="border-t border-stone-100 my-1" />
 
           <button
             onClick={() => {
               disconnect();
               setDropdownOpen(false);
             }}
-            className="w-full text-left px-3 py-2 text-xs font-display tracking-wider text-crimson hover:bg-crimson/10 rounded-lg transition-colors"
+            className="w-full text-left px-3 py-2 text-xs font-display font-semibold tracking-wide text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
           >
             🚪 Disconnect
           </button>

@@ -122,11 +122,11 @@ export const getAchievementsController = async (req: Request, res: Response, nex
 export const getStatsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const [totalWarriors, totalBattles] = await Promise.all([
-      Warrior.countDocuments(),
-      Battle.countDocuments(),
+      Warrior.countDocuments({ isDemo: { $ne: true } }),
+      Battle.countDocuments({ isDemo: { $ne: true } }),
     ]);
 
-    const topWarrior = await Warrior.findOne().sort({ wins: -1 }).select('name archetype wins walletAddress');
+    const topWarrior = await Warrior.findOne({ isDemo: { $ne: true } }).sort({ wins: -1 }).select('name archetype wins walletAddress');
 
     return res.status(200).json(formatSuccess({
       totalWarriors,

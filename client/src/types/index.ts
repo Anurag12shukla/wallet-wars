@@ -93,6 +93,7 @@ export interface BattleResult {
   battleId: string;
   winner: string;
   loser: string;
+  winnerPlayer?: 'playerOne' | 'playerTwo';
   rounds: BattleRound[];
   battleLog: string[];
   playerOneScore: number;

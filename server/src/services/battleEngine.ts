@@ -72,11 +72,31 @@ const ACTION_DESCRIPTIONS: Record<string, (attacker: string, defender: string, d
 };
 
 export function runBattleEngine(input: BattleInput): BattleResult {
-  const seed = stringToSeed(input.battleSeed + input.playerOneWallet + input.playerTwoWallet);
+  const isP1First = input.playerOneWallet.toLowerCase() <= input.playerTwoWallet.toLowerCase();
+
+  // Both wallets have the exact same health (100 HP) whenever or whoever battles them
+  const EQUALIZED_HP = 100;
+
+  // Sort inputs deterministically so the engine RNG always flows the same way for a given pair
+  const engineInput = {
+    playerOneWallet: isP1First ? input.playerOneWallet : input.playerTwoWallet,
+    playerTwoWallet: isP1First ? input.playerTwoWallet : input.playerOneWallet,
+    playerOne: {
+      ...(isP1First ? input.playerOne : input.playerTwo),
+      hp: EQUALIZED_HP,
+    },
+    playerTwo: {
+      ...(isP1First ? input.playerTwo : input.playerOne),
+      hp: EQUALIZED_HP,
+    },
+    battleSeed: input.battleSeed,
+  };
+
+  const seed = stringToSeed(engineInput.battleSeed);
   const rng = createSeededRng(seed);
 
-  let p1Hp = input.playerOne.hp;
-  let p2Hp = input.playerTwo.hp;
+  let p1Hp = EQUALIZED_HP;
+  let p2Hp = EQUALIZED_HP;
 
   const rounds: IRound[] = [];
   const battleLog: string[] = [];
@@ -92,10 +112,10 @@ export function runBattleEngine(input: BattleInput): BattleResult {
   const startTime = Date.now();
 
   // Determine turn order based on speed
-  const p1SpeedAdvantage = input.playerOne.speed > input.playerTwo.speed;
+  const p1SpeedAdvantage = engineInput.playerOne.speed > engineInput.playerTwo.speed;
 
-  battleLog.push(`⚔️  ${input.playerOne.name} vs ${input.playerTwo.name}`);
-  battleLog.push(`🎲 Battle Seed: ${input.battleSeed.substring(0, 8)}...`);
+  battleLog.push(`⚔️  ${engineInput.playerOne.name} vs ${engineInput.playerTwo.name}`);
+  battleLog.push(`🎲 Battle Seed: ${engineInput.battleSeed.substring(0, 8)}...`);
 
   for (let roundNum = 1; roundNum <= maxRounds; roundNum++) {
     if (p1Hp <= 0 || p2Hp <= 0) break;
@@ -107,8 +127,8 @@ export function runBattleEngine(input: BattleInput): BattleResult {
       if (p1Hp <= 0 || p2Hp <= 0) break;
 
       const isP1 = firstMover === 'playerOne';
-      const attacker = isP1 ? input.playerOne : input.playerTwo;
-      const defender = isP1 ? input.playerTwo : input.playerOne;
+      const attacker = isP1 ? engineInput.playerOne : engineInput.playerTwo;
+      const defender = isP1 ? engineInput.playerTwo : engineInput.playerOne;
       const attackerName = attacker.name;
       const defenderName = defender.name;
 
@@ -221,7 +241,7 @@ export function runBattleEngine(input: BattleInput): BattleResult {
   let winner: 'playerOne' | 'playerTwo';
   if (p1Hp <= 0 && p2Hp <= 0) {
     // Both KO'd — speed determines winner
-    winner = input.playerOne.speed >= input.playerTwo.speed ? 'playerOne' : 'playerTwo';
+    winner = engineInput.playerOne.speed >= engineInput.playerTwo.speed ? 'playerOne' : 'playerTwo';
   } else if (p1Hp <= 0) {
     winner = 'playerTwo';
   } else if (p2Hp <= 0) {
@@ -235,27 +255,37 @@ export function runBattleEngine(input: BattleInput): BattleResult {
   }
 
   const victoryMsg = winner === 'playerOne'
-    ? `🏆 ${input.playerOne.name} WINS!`
-    : `🏆 ${input.playerTwo.name} WINS!`;
+    ? `🏆 ${engineInput.playerOne.name} WINS!`
+    : `🏆 ${engineInput.playerTwo.name} WINS!`;
   battleLog.push(victoryMsg);
 
+  const actualWinner = isP1First ? winner : (winner === 'playerOne' ? 'playerTwo' : 'playerOne');
+
+  const mappedRounds = rounds.map(r => ({
+    ...r,
+    attacker: isP1First ? r.attacker : (r.attacker === 'playerOne' ? 'playerTwo' : 'playerOne' as 'playerOne' | 'playerTwo'),
+    playerOneHp: isP1First ? r.playerOneHp : r.playerTwoHp,
+    playerTwoHp: isP1First ? r.playerTwoHp : r.playerOneHp,
+  }));
+
   return {
-    rounds,
-    winner,
+    rounds: mappedRounds,
+    winner: actualWinner,
     battleLog,
-    playerOneScore: p1Score,
-    playerTwoScore: p2Score,
-    playerOneDamageDealt: p1DamageDealt,
-    playerTwoDamageDealt: p2DamageDealt,
-    playerOneCriticalHits: p1CriticalHits,
-    playerTwoCriticalHits: p2CriticalHits,
+    playerOneScore: isP1First ? p1Score : p2Score,
+    playerTwoScore: isP1First ? p2Score : p1Score,
+    playerOneDamageDealt: isP1First ? p1DamageDealt : p2DamageDealt,
+    playerTwoDamageDealt: isP1First ? p2DamageDealt : p1DamageDealt,
+    playerOneCriticalHits: isP1First ? p1CriticalHits : p2CriticalHits,
+    playerTwoCriticalHits: isP1First ? p2CriticalHits : p1CriticalHits,
     duration: Date.now() - startTime,
   };
 }
 
 export function generateBattleSeed(p1Wallet: string, p2Wallet: string): string {
-  const timestamp = Date.now().toString(36);
-  const combined = `${p1Wallet}-${p2Wallet}-${timestamp}`;
+  // Sort wallets to ensure A vs B is identical to B vs A
+  const sorted = [p1Wallet.toLowerCase(), p2Wallet.toLowerCase()].sort();
+  const combined = `${sorted[0]}-${sorted[1]}`;
   return Buffer.from(combined).toString('base64').substring(0, 32);
 }
 

@@ -37,7 +37,7 @@ export const getLeaderboardController = async (req: Request, res: Response, next
         sortField = { wins: -1, xp: -1 };
     }
 
-    const query: Record<string, unknown> = {};
+    const query: Record<string, unknown> = { isDemo: { $ne: true } };
     if (category === 'degens') query.archetype = 'DEGEN';
     if (category === 'rugSurvivors') query.archetype = 'RUG_SURVIVOR';
 
